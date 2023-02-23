@@ -1,20 +1,18 @@
-{
-    "scenarios":[
-        {
-            "name":"test",
-            "scenario":[
-                {
-                    "device": "ThinkPad",
-                    "function": "cluster",
-                    "arg": "headLightsToggle"
-                },
-                {
-                    "device": "Raspberry",
-                    "function": "max7219",
-                    "arg": "headLightsToggle"
-                }
-            ]
-        
-        }
-    ]
-}
+[
+    {
+        "name":"test",
+        "scenario":[
+            {
+                "device": "ThinkPad",
+                "function": "cluster",
+                "arg": "headLightsToggle"
+            },
+            {
+                "device": "Raspberry",
+                "function": "max7219",
+                "arg": "headLightsToggle"
+            }
+        ]
+    
+    }
+]
