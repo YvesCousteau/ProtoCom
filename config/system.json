@@ -1,0 +1,8 @@
+{
+    "name":"Prototype Project",
+    "ip":"192.168.1.",
+    "runAtBoot":{
+        "command":"crontab",
+        "argument":"@reboot sleep 15 && {PATH_SERVICE}/server_slave.py {IP}"
+    }
+}
