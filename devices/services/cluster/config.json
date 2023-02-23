@@ -1,0 +1,40 @@
+{
+    "name":"HMI",
+    "client": "python3 client_master.py",
+    "args": 2,
+    "type":"option",
+    "option":{
+        "Swap Car Mode (Left)":"[",
+        "Swap Car Mode (Right)":"]",
+        "Swap Map View":"d / f",
+        "Swap Car Info (Left)":"e",
+        "Swap Car Info (Right)":"r",
+        "Head Lights Toggle":"c",
+        "Hazard Lights":"Alpha 9",
+        "Start Engine":"Alpha 0",
+        "Emergency Parking Brake":"Alpha 8",
+        "Accelerate":"Top arrow",
+        "Brake":"Bottom arrow",
+        "Turn signal (Left)":"z",
+        "Turn signal (Right)":"x",
+        "Increase Steering Wheel Control":"q",
+        "Decrease Steering Wheel Control":"w",
+        "Enable / Disable Steering Wheel Control":"s",
+
+        
+        "Power View":"y",
+        "Car View":"u",
+        "Position View":"i",
+        "Music View":"o",
+        "Contact View":"P",
+        "Mouve Top":"L",
+        "Mouve Bottom":"Semilicon",
+        "Enter":"Enter",
+        "Back":"j",
+        "Decrease sound":"Minus",
+        "Increase sound":"Equals",
+        "Previous Music":"Alpha 2",
+        "Next Music":"Alpha 3",
+        "Play / Stop Sound":"Alpha 4"
+    }
+}
