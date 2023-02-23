@@ -5,7 +5,6 @@
         "client":"client_master.py",
         "server":"server_slave.py",
         "removable":false,
-        "type":"options",
         "options":["reboot","powerOff"]
     },
     {
@@ -14,7 +13,6 @@
         "client":"client_master.py",
         "server":"server_slave.py",
         "removable":true,
-        "type":"options",
         "options":["home","exit"]
     },
     {
@@ -23,7 +21,6 @@
         "client":"client_master.py",
         "server":"server_slave.py",
         "removable":true,
-        "type":"options",
         "options":[
             "powerView",
             "carView",
@@ -47,7 +44,6 @@
         "client":"client_master.py",
         "server":"server_slave.py",
         "removable":true,
-        "type":"options",
         "options":[
             "swapCarModeLeft",
             "swapCarModeRight",
@@ -73,7 +69,6 @@
         "client":"client_master.py",
         "server":"server_slave.py",
         "removable":true,
-        "type":"text",
-        "options":[]
+        "options":["test","ok"]
     }
 ]

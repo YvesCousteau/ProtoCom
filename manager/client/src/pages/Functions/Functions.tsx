@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Input from "../../components/Input";
 import Modal from "../../components/Modal";
 import * as Api from './Api';
 import Alert from "../../components/Alert";
@@ -35,16 +34,16 @@ export default function Functions() {
             setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
         }
     }, [state]);
-    // Get functions Name
+    // Get Functions Name
     useEffect(() => {
-        if(device && functions) {
+        if(functions) {
             const listFunctions: any = [];
             for(const item of functions) {
                 listFunctions.push(item.name);
             }
             setFunctionsName(listFunctions);
         }
-    }, [device, functions]);
+    }, [functions]);
     // Get Device functions
     useEffect(() => {
         if(device && functionsName) {
@@ -152,7 +151,30 @@ function AddModal(props: any) {
         </Modal>
     );
 }
-
+function DeleteModal(props: any) {
+    let { name } = useParams();
+    const [deleted, setDeleted] = useState(false);
+    useEffect(() => {
+        if(deleted) {
+            let body = {name:props.item.function};
+            Api.deleteDeviceFunction(body,name,props.item.setState);
+            props.item.setRender(!props.item.render);
+            props.setModal(false)
+            setDeleted(false);
+        }
+    }, [deleted,props,name]);
+    return (
+        <Modal
+            open={props.modal}
+            setOpen={props.setModal}
+            title="Remove"
+            subtitle="All functions associated with this devices will be remove">
+            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                <button className='btn btn-open w-32 mx-auto' onClick={() => setDeleted(true)}>Remove</button>
+            </div>
+        </Modal>
+    );
+}
 function RunModal(props: any) {
     const [fct, setFct]: any = useState(null);
     const [ran, setRan] = useState(false);
@@ -201,36 +223,10 @@ function RunModal(props: any) {
                 title="Update"
                 subtitle={"Run the service : " + fct.name}>
                 <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                    {fct.type === "text" && <Input label="Value :" placeholder="Text..." onChange={setInputValue}/>}
-                    {fct.type === "options" && <ListBox data={fct.options} setSelected={setInputValue} init={fct.options[0]}/>}
+                    <ListBox data={fct.options} setSelected={setInputValue} init={fct.options[0]}/>
                     <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+props.item.function.cmd+" "+inputValue}</button>
                 </div>
             </Modal>}
         </>
-    );
-}
-
-function DeleteModal(props: any) {
-    let { name } = useParams();
-    const [deleted, setDeleted] = useState(false);
-    useEffect(() => {
-        if(deleted) {
-            let body = {name:props.item.function};
-            Api.deleteDeviceFunction(body,name,props.item.setState);
-            props.item.setRender(!props.item.render);
-            props.setModal(false)
-            setDeleted(false);
-        }
-    }, [deleted,props,name]);
-    return (
-        <Modal
-            open={props.modal}
-            setOpen={props.setModal}
-            title="Remove"
-            subtitle="All functions associated with this devices will be remove">
-            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                <button className='btn btn-open w-32 mx-auto' onClick={() => setDeleted(true)}>Remove</button>
-            </div>
-        </Modal>
     );
 }
