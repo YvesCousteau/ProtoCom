@@ -189,4 +189,3 @@ export function sound(ip: string, option: string, setState: any) {
         console.log(error);
     }
 }
-// ===================================================================================================== //

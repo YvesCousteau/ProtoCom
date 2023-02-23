@@ -121,7 +121,7 @@ function AddModal(props: any) {
             props.setModal(false);
             setCreated(false);
         }
-    }, [created, inputName, name]);
+    }, [created, inputName, name, props]);
     
     return (
         <Modal
@@ -185,7 +185,7 @@ function RunModal(props: any) {
             }
         }
             
-    }, [ran, fct, inputValue]);
+    }, [ran, fct, inputValue, props]);
     return (
         <>
             {fct && <Modal
