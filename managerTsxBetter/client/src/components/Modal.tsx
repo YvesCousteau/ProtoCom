@@ -1,7 +1,7 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 
-export default function Modal(props) {
+export default function Modal(props: any) {
   const cancelButtonRef = useRef(null)
 
   return (

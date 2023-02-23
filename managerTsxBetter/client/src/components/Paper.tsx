@@ -1,5 +1,4 @@
-import { Children } from "react";
-export default function Paper(props) {
+export default function Paper(props: any) {
     return (
         <div className="rounded-[14px] shadow-md px-3 py-3 bg-gray-300 mx-auto w-80">
             <div className='flex justify-between w-full mb-1'>

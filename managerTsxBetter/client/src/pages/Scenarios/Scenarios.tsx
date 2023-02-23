@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Paper from "../../components/Paper";
 import * as Api from "./Api";
+import Alert from "../../components/Alert";
 
 export default function Scenarios() {
     const [scenarios, setScenarios] = useState([]);
@@ -13,7 +14,7 @@ export default function Scenarios() {
     });
     useEffect(() => {
         Api.getScenarios(setScenarios,setAlertData,alertData);
-    }, []);
+    }, [alertData]);
     return(
         <div className="mx-8">
             <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
@@ -26,6 +27,7 @@ export default function Scenarios() {
                     )}
                 </div>
             </div>
+            <Alert data={alertData} setData={setAlertData} />
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
-export default function ListBox(props) {
+export default function ListBox(props: any) {
   let index = 0;
   for (const item in props.data) {
     if(props.data[item] === props.init) {
@@ -13,7 +13,7 @@ export default function ListBox(props) {
   const [selected, setSelected] = useState(props.data[index])
   useEffect(() => {
     props.setSelected(selected)
-  }, [selected]);
+  }, [selected, props]);
   return (
     <div className="">
       <Listbox value={selected} onChange={setSelected}>
@@ -34,7 +34,7 @@ export default function ListBox(props) {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm h-28">
-              {props.data.map((item, index) => (
+              {props.data.map((item: any, index: number) => (
                 <Listbox.Option
                   key={index}
                   className={({ active }) =>

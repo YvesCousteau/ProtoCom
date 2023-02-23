@@ -1,4 +1,4 @@
-export function getApi(setValue) {
+export function getApi(setValue: any) {
     try {
         let result = fetch("/api", {
             method: 'GET'

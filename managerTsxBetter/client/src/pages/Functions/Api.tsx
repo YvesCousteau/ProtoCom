@@ -1,4 +1,4 @@
-export function getDevice(setValue,name,setAlertData,alertData) {
+export function getDevice(setValue: any, name: any, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/device/"+name, {
             method: 'GET'
@@ -15,7 +15,7 @@ export function getDevice(setValue,name,setAlertData,alertData) {
     }
 }
 
-export function getFunctions(setValue,setAlertData,alertData) {
+export function getFunctions(setValue: any, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/functions/", {
             method: 'GET'
@@ -26,13 +26,13 @@ export function getFunctions(setValue,setAlertData,alertData) {
             if(sucess.ok){type = 'Success'}else{type = 'Error'}
             setAlertData({...alertData,...{active:true,type:type,status:sucess.status,url:sucess.url}});
         })
-        result.then((res) => res.json()).then((data) => setValue(data.data.functions));
+        result.then((res) => res.json()).then((data) => setValue(data.data));
     } catch (error) {
         console.log(error);
     }
 }
 
-export function getFunction(setValue,name,setAlertData,alertData) {
+export function getFunction(setValue: any, name: string, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/function/"+name, {
             method: 'GET'
@@ -49,7 +49,7 @@ export function getFunction(setValue,name,setAlertData,alertData) {
     }
 }
 
-export function addDeviceFunction(body,name,setAlertData,alertData) {
+export function addDeviceFunction(body: any, name: any, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/device/"+name, {
             method: 'POST',
@@ -74,7 +74,7 @@ export function addDeviceFunction(body,name,setAlertData,alertData) {
         console.log(error);
     }
 }
-export function deleteDeviceFunction(body,name,setAlertData,alertData) {
+export function deleteDeviceFunction(body: any, name: any, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/device/"+name, {
             method: 'DELETE',
@@ -100,7 +100,7 @@ export function deleteDeviceFunction(body,name,setAlertData,alertData) {
     }
 }
 
-export function power(ip,option,setAlertData,alertData) {
+export function power(ip: string, option: string, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/service/power/"+option+"/"+ip, {
             method: 'POST',
@@ -121,7 +121,7 @@ export function power(ip,option,setAlertData,alertData) {
     }
 }
 
-export function max7219(ip,intput,setAlertData,alertData) {
+export function max7219(ip: string, intput: string, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/service/max7219/"+intput+"/"+ip, {
             method: 'POST',
@@ -142,7 +142,7 @@ export function max7219(ip,intput,setAlertData,alertData) {
     }
 }
 
-export function cluster(ip,option,setAlertData,alertData) {
+export function cluster(ip: string, option: string, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/service/cluster/"+option+"/"+ip, {
             method: 'POST',
@@ -163,7 +163,7 @@ export function cluster(ip,option,setAlertData,alertData) {
     }
 }
 
-export function ivi(ip,option,setAlertData,alertData) {
+export function ivi(ip: string, option: string, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/service/ivi/"+option+"/"+ip, {
             method: 'POST',
@@ -184,7 +184,7 @@ export function ivi(ip,option,setAlertData,alertData) {
     }
 }
 
-export function sound(ip,option,setAlertData,alertData) {
+export function sound(ip: string, option: string, setAlertData: any, alertData: any) {
     try {
         let result = fetch("/api/service/sound/"+option+"/"+ip, {
             method: 'POST',

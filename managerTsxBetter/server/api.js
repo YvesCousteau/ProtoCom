@@ -1,7 +1,28 @@
+// JSON CONFIG
+const fs = require('fs');
+const systemName = '../../config/system.json';
+const system = require(systemName);
+const devicesName = '../../config/devices.json';
+const devices = require(devicesName);
+const functionsName = '../../config/functions.json';
+const functions = require(functionsName);
+const scenariosName = '../../config/scenarios.json';
+const scenarios = require(scenariosName);
+
+function init(app) {
+    app.get('/api', (req, res) => {
+        if (system == null || devices == null || functions == null) {
+            res.status(400).json({ "error": "Missing config JSON file" });
+            return;
+        }
+        res.json({ "message": "Server is UP !" });
+    });
+}
+
 function equipements(app) {
     // GetDevices
     app.get("/api/devices", (req, res, next) => {
-        if (devices.devices == {}) {
+        if (devices == {}) {
             res.status(400).json({ "error": "No device" });
             return;
         }
@@ -12,7 +33,7 @@ function equipements(app) {
     });
     // GetFunctions
     app.get("/api/functions", (req, res, next) => {
-        if (functions.functions == {}) {
+        if (functions == {}) {
             res.status(400).json({ "error": "No function" });
             return;
         }
@@ -23,7 +44,7 @@ function equipements(app) {
     });
     // GetScenarios
     app.get("/api/scenarios", (req, res, next) => {
-        if (scenarios.scenarios == {}) {
+        if (scenarios == {}) {
             res.status(400).json({ "error": "No function" });
             return;
         }
@@ -35,11 +56,11 @@ function equipements(app) {
     // GetDevice
     app.get("/api/device/:name", (req, res, next) => {
         const name = req.params.name;
-        if (devices.devices == {}) {
+        if (devices == {}) {
             res.status(400).json({ "error": "No device" });
             return;
         }
-        for (const item of devices.devices) {
+        for (const item of devices) {
             if (item.name == name) {
                 res.json({
                     "message": "success",
@@ -52,11 +73,11 @@ function equipements(app) {
     // GetFunction
     app.get("/api/function/:name", (req, res, next) => {
         const name = req.params.name;
-        if (functions.functions == {}) {
+        if (functions == {}) {
             res.status(400).json({ "error": "No function" });
             return;
         }
-        for (const item of functions.functions) {
+        for (const item of functions) {
             if (item.name == name) {
                 res.json({
                     "message": "success",
@@ -69,11 +90,11 @@ function equipements(app) {
     // GetScenario
     app.get("/api/scenario/:name", (req, res, next) => {
         const name = req.params.name;
-        if (scenarios.scenarios == {}) {
+        if (scenarios == {}) {
             res.status(400).json({ "error": "No function" });
             return;
         }
-        for (const item of scenarios.scenarios) {
+        for (const item of scenarios) {
             if (item.name == name) {
                 res.json({
                     "message": "success",
@@ -99,7 +120,7 @@ function equipements(app) {
             return;
         }
         // Select the right Device
-        for (const item of devices.devices) {
+        for (const item of devices) {
             if (item.name == req.params.name) {
                 // Check if we can add the function
                 if (!item.functions.includes(req.body.name)) {
@@ -122,7 +143,7 @@ function equipements(app) {
     app.delete("/api/device/:name", (req, res, next) => {
         const name = req.body.name;
         var errors = []
-        if (devices.devices == {}) {
+        if (devices == {}) {
             res.status(400).json({ "error": "No device" });
             return;
         }
@@ -134,7 +155,7 @@ function equipements(app) {
             return;
         }
         // Select the right Device
-        for (const item of devices.devices) {
+        for (const item of devices) {
             if (item.name == req.params.name) {
                 // Check if we can remove the function
                 if (item.functions.includes(name) && item.functions) {
@@ -219,3 +240,5 @@ function services(app) {
         res.json({ "message": system.ip + req.params.ip + " is " + req.params.option + " ..." });
     });
 }
+
+module.exports = { equipements, services, init };
