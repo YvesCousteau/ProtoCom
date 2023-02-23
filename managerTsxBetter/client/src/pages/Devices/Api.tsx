@@ -1,15 +1,17 @@
-export function getDevices(setValue: any, setAlertData: any, alertData: any) {
+export function getDevices(setValue: any, setState: any) {
     try {
         let result = fetch("/api/devices/", {
             method: 'GET'
         })
-        result.then((sucess) => { 
+        result.then((sucess) => {
             console.log(sucess);
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{active:true,type:type,status:sucess.status,url:sucess.url}});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
-        result.then((res) => res.json()).then((data) => setValue(data.data.devices));
+        result.then((res) => res.json()).then((data) => setValue(data.data));
     } catch (error) {
         console.log(error);
     }

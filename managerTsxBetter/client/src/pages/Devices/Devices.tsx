@@ -7,15 +7,17 @@ import { Link } from "react-router-dom";
 export default function Device() {
     const [devices, setDevices] = useState([]);
     // Alert Message
-    const [alertData, setAlertData] = useState({
-        active:false,
-        type:null,
-        status:null,
-        url:null
-    });
+    const [state, setState]: any = useState(null);
+    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
-        Api.getDevices(setDevices,setAlertData,alertData);
-    }, [alertData]);
+        Api.getDevices(setDevices, setState);
+    },[]);
+    useEffect(() => {
+        if (state) {
+            setAlert({ visible: true, type: state.state, status: null, url: state.url });
+            setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
+        }
+    }, [state]);
     return(
         <div className="mx-8">
             <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
@@ -23,12 +25,12 @@ export default function Device() {
                     <div className="text-classic ">Devices</div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4  gap-4 justify-items-center mx-6">
-                    {devices !== null && devices.map((device: any) => 
-                        <Item  device={device} alertData={alertData} setAlertData={setAlertData}/>
+                    {devices && devices.map((device: any, index: number) => 
+                        <Item key={index} device={device}/>
                     )}
                 </div>
             </div>
-            <Alert data={alertData} setData={setAlertData} />
+            <Alert alert={alert}/>
         </div>
     );
 }

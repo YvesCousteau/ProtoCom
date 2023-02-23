@@ -1,13 +1,15 @@
-export function getDevice(setValue: any, name: any, setAlertData: any, alertData: any) {
+export function getDevice(setValue: any, name: any, setState: any) {
     try {
         let result = fetch("/api/device/"+name, {
             method: 'GET'
         })
         result.then((sucess) => { 
             console.log(sucess);
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{active:true,type:type,status:sucess.status,url:sucess.url}});
+            if (sucess.ok) {
+                setState({ state: 'Success', url: sucess.url })
+            } else {
+                setState({ state: 'Error', url: sucess.url })
+            }
         })
         result.then((res) => res.json()).then((data) => setValue(data.data));
     } catch (error) {
@@ -15,16 +17,18 @@ export function getDevice(setValue: any, name: any, setAlertData: any, alertData
     }
 }
 
-export function getFunctions(setValue: any, setAlertData: any, alertData: any) {
+export function getFunctions(setValue: any, setState: any) {
     try {
         let result = fetch("/api/functions/", {
             method: 'GET'
         })
         result.then((sucess) => { 
             console.log(sucess);
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{active:true,type:type,status:sucess.status,url:sucess.url}});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
         result.then((res) => res.json()).then((data) => setValue(data.data));
     } catch (error) {
@@ -32,16 +36,18 @@ export function getFunctions(setValue: any, setAlertData: any, alertData: any) {
     }
 }
 
-export function getFunction(setValue: any, name: string, setAlertData: any, alertData: any) {
+export function getFunction(setValue: any, name: string, setState: any) {
     try {
         let result = fetch("/api/function/"+name, {
             method: 'GET'
         })
         result.then((sucess) => { 
             console.log(sucess);
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{active:true,type:type,status:sucess.status,url:sucess.url}});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
         result.then((res) => res.json()).then((data) => setValue(data.data));
     } catch (error) {
@@ -49,7 +55,7 @@ export function getFunction(setValue: any, name: string, setAlertData: any, aler
     }
 }
 
-export function addDeviceFunction(body: any, name: any, setAlertData: any, alertData: any) {
+export function addDeviceFunction(body: any, name: any, setState: any) {
     try {
         let result = fetch("/api/device/"+name, {
             method: 'POST',
@@ -61,20 +67,17 @@ export function addDeviceFunction(body: any, name: any, setAlertData: any, alert
         })
         result.then((sucess) => {
             console.log(sucess);
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
-export function deleteDeviceFunction(body: any, name: any, setAlertData: any, alertData: any) {
+export function deleteDeviceFunction(body: any, name: any, setState: any) {
     try {
         let result = fetch("/api/device/"+name, {
             method: 'DELETE',
@@ -86,119 +89,101 @@ export function deleteDeviceFunction(body: any, name: any, setAlertData: any, al
         })
         result.then((sucess) => {
             console.log(sucess);
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
 
-export function power(ip: string, option: string, setAlertData: any, alertData: any) {
+export function power(ip: string, option: string, setState: any) {
     try {
         let result = fetch("/api/service/power/"+option+"/"+ip, {
             method: 'POST',
         })
         result.then((sucess) => { 
             console.log(sucess)
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
 
-export function max7219(ip: string, intput: string, setAlertData: any, alertData: any) {
+export function max7219(ip: string, intput: string, setState: any) {
     try {
         let result = fetch("/api/service/max7219/"+intput+"/"+ip, {
             method: 'POST',
         })
         result.then((sucess) => { 
             console.log(sucess)
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
 
-export function cluster(ip: string, option: string, setAlertData: any, alertData: any) {
+export function cluster(ip: string, option: string, setState: any) {
     try {
         let result = fetch("/api/service/cluster/"+option+"/"+ip, {
             method: 'POST',
         })
         result.then((sucess) => { 
             console.log(sucess)
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
 
-export function ivi(ip: string, option: string, setAlertData: any, alertData: any) {
+export function ivi(ip: string, option: string, setState: any) {
     try {
         let result = fetch("/api/service/ivi/"+option+"/"+ip, {
             method: 'POST',
         })
         result.then((sucess) => { 
             console.log(sucess)
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
 
-export function sound(ip: string, option: string, setAlertData: any, alertData: any) {
+export function sound(ip: string, option: string, setState: any) {
     try {
         let result = fetch("/api/service/sound/"+option+"/"+ip, {
             method: 'POST',
         })
         result.then((sucess) => { 
             console.log(sucess)
-            let type;
-            if(sucess.ok){type = 'Success'}else{type = 'Error'}
-            setAlertData({...alertData,...{
-                active:true,
-                type:type,
-                status:sucess.status,
-                url:sucess.url
-            }});
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
         })
     } catch (error) {
         console.log(error);

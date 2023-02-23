@@ -6,15 +6,17 @@ import Alert from "../../components/Alert";
 export default function Scenarios() {
     const [scenarios, setScenarios] = useState([]);
     // Alert Message
-    const [alertData, setAlertData] = useState({
-        active:false,
-        type:null,
-        status:null,
-        url:null
-    });
+    const [state, setState]: any = useState(null);
+    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
-        Api.getScenarios(setScenarios,setAlertData,alertData);
-    }, [alertData]);
+        Api.getScenarios(setScenarios, setState);
+    }, []);
+    useEffect(() => {
+        if (state) {
+            setAlert({ visible: true, type: state.state, status: null, url: state.url });
+            setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
+        }
+    }, [state]);
     return(
         <div className="mx-8">
             <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
@@ -22,12 +24,12 @@ export default function Scenarios() {
                     <div className="text-classic ">Scenarios</div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4  gap-4 justify-items-center mx-6">
-                    {scenarios && scenarios.length > 0 && scenarios.map((scenario: any) => 
-                        <Item  scenario={scenario} alertData={alertData} setAlertData={setAlertData}/>
+                    {scenarios && scenarios.length > 0 && scenarios.map((scenario: any, index: number) => 
+                        <Item  key={index} scenario={scenario}/>
                     )}
                 </div>
             </div>
-            <Alert data={alertData} setData={setAlertData} />
+            <Alert alert={alert}/>
         </div>
     );
 }
