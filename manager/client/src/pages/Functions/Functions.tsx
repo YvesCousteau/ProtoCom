@@ -4,40 +4,48 @@ import Modal from "../../components/Modal";
 import * as Api from './Api';
 import Alert from "../../components/Alert";
 import ListBox from "../../components/ListBox";
-import {useParams, Link} from "react-router-dom";
-
+import {useParams} from "react-router-dom";
 import Paper from "../../components/Paper";
 
-export default function Functions(props) {
+export default function Functions() {
     let { name } = useParams();
-    const [functions, setFunctions] = useState(null);
-    const [functionsName, setFunctionsName] = useState(null);
-    const [device, setDevice] = useState(null);
-    const [deviceFunctions, setDeviceFunctions] = useState(null);
+    const [modalAdd, setModalAdd] = useState(false);
+    const [functions, setFunctions]: any = useState(null);
+    const [functionsName, setFunctionsName]: any = useState(null);
+    const [device, setDevice]: any = useState(null);
+    const [deviceFunctions, setDeviceFunctions]: any = useState(null);
     // Alert Message
-    const [alertData, setAlertData] = useState({
-        active:false,
-        type:null,
-        status:null,
-        url:null
-    });
+    const [state, setState]: any = useState(null);
+    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
 
     const [render, setRender] = useState(null);
 
+    // Render device functions name
     useEffect(() => {
-        Api.getDevice(setDevice,name,setAlertData,alertData);
-        Api.getFunctions(setFunctions,setAlertData,alertData);
-    }, [render]);
-    
+        Api.getDevice(setDevice, name, setState);
+    }, [render, name]);
+    // Get all functions Once
+    useEffect(() => {
+        Api.getFunctions(setFunctions, setState);
+    }, []);
+    // Render alert
+    useEffect(() => {
+        if (state) {
+            setAlert({ visible: true, type: state.state, status: null, url: state.url });
+            setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
+        }
+    }, [state]);
+    // Get functions Name
     useEffect(() => {
         if(device && functions) {
-            const listFunctions = [];
+            const listFunctions: any = [];
             for(const item of functions) {
                 listFunctions.push(item.name);
             }
             setFunctionsName(listFunctions);
         }
-    }, [device]);
+    }, [device, functions]);
+    // Get Device functions
     useEffect(() => {
         if(device && functionsName) {
             const listDeviceFunctions = [];
@@ -48,9 +56,8 @@ export default function Functions(props) {
             }
             setDeviceFunctions(listDeviceFunctions);
         }
-    }, [functionsName]);
+    }, [functionsName,device]);
 
-    const [modalAdd, setModalAdd] = useState(false);
     return(
         <div className="mx-8">
             <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
@@ -59,14 +66,17 @@ export default function Functions(props) {
                     <button className=' btn btn-classic h-8 w-24 ' onClick={() => setModalAdd(true)}>+ ADD</button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4  gap-4 justify-items-center mx-6">
-                    {deviceFunctions && deviceFunctions.length > 0 && deviceFunctions.map((fct) => 
+                    {deviceFunctions && deviceFunctions.length > 0 && deviceFunctions.map((fct: any,index: number) => 
                         <Item 
+                        key={index}
                         function={fct}
                         device={device}
+                        setState={setState}
+                        
                         setRender={setRender}
-                        render={render}
-                        alertData={alertData}
-                        setAlertData={setAlertData}/>
+                        render={render} />
+
+                        
                     )}
                 </div>
             </div>
@@ -76,18 +86,18 @@ export default function Functions(props) {
                 setModal={setModalAdd} 
                 functions={functionsName}
                 device={device}
+                setState={setState}
+
                 setRender={setRender}
-                render={render}
-                alertData={alertData}
-                setAlertData={setAlertData}/>
-                <Alert data={alertData} setData={setAlertData}/>
+                render={render} />
             </>}
+            <Alert alert={alert}/>
         </div>
         
     );
 }
 
-function Item(props) {
+function Item(props: any) {
     const [modalRun, setModalRun] = useState(false);
     const [modalDelete, setModalDelete] = useState(false);
     return(
@@ -106,19 +116,19 @@ function Item(props) {
     );
 }
 
-function AddModal(props) {
+function AddModal(props: any) {
     let { name } = useParams();
     const [inputName, setInputName] = useState();
     const [created, setCreated] = useState(false);
     useEffect(() => {
         if(created) {
             let body = {name:inputName};
-            Api.addDeviceFunction(body,name,props.setAlertData,props.alertData);
+            Api.addDeviceFunction(body,name,props.setState);
             props.setRender(!props.render);
             props.setModal(false);
             setCreated(false);
         }
-    }, [created]);
+    }, [created, inputName, name, props]);
     
     return (
         <Modal
@@ -143,44 +153,46 @@ function AddModal(props) {
     );
 }
 
-function RunModal(props) {
-    const [fct, setFct] = useState(null);
+function RunModal(props: any) {
+    const [fct, setFct]: any = useState(null);
     const [ran, setRan] = useState(false);
     const [inputValue, setInputValue] = useState('');
     useEffect(() => {
         if(props.modal) {
-            Api.getFunction(setFct,props.item.function,props.item.setAlertData,props.item.alertData);
+            Api.getFunction(setFct, props.item.function, props.item.setState);
         }
         if(ran) {
-            switch(fct.name)
-            {
-                case "sound":
-                    console.log("sound");
-                    Api.sound(props.item.device.ip,inputValue,props.item.setAlertData,props.item.alertData);
-                    break;
-                case "power":
-                    console.log("power");
-                    Api.power(props.item.device.ip,inputValue,props.item.setAlertData,props.item.alertData);
-                    break;
-                case "max7219":
-                    console.log("max7219");
-                    Api.max7219(props.item.device.ip,inputValue,props.item.setAlertData,props.item.alertData);
-                    break;
-                case "cluster":
-                    console.log("cluster");
-                    Api.cluster(props.item.device.ip,inputValue,props.item.setAlertData,props.item.alertData);
-                    break;
-                case "ivi":
-                    console.log("ivi");
-                    Api.ivi(props.item.device.ip,inputValue,props.item.setAlertData,props.item.alertData);
-                    break;
-                default:
-                    break;
+            if (fct) {
+                switch (fct.name) {
+                    case "sound":
+                        console.log("sound");
+                        Api.sound(props.item.device.ip, inputValue, props.item.setState);
+                        break;
+                    case "power":
+                        console.log("power");
+                        Api.power(props.item.device.ip, inputValue, props.item.setState);
+                        break;
+                    case "max7219":
+                        console.log("max7219");
+                        Api.max7219(props.item.device.ip, inputValue, props.item.setState);
+                        break;
+                    case "cluster":
+                        console.log("cluster");
+                        Api.cluster(props.item.device.ip, inputValue, props.item.setState);
+                        break;
+                    case "ivi":
+                        console.log("ivi");
+                        Api.ivi(props.item.device.ip, inputValue, props.item.setState);
+                        break;
+                    default:
+                        break;
+                }
+                props.setModal(false);
+                setRan(false);
             }
-            props.setModal(false);
-            setRan(false);
         }
-    }, [ran,props.modal]);
+            
+    }, [ran, fct, inputValue, props]);
     return (
         <>
             {fct && <Modal
@@ -189,8 +201,8 @@ function RunModal(props) {
                 title="Update"
                 subtitle={"Run the service : " + fct.name}>
                 <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                    {fct.type == "text" && <Input label="Value :" placeholder="Text..." onChange={setInputValue}/>}
-                    {fct.type == "options" && <ListBox data={fct.options} setSelected={setInputValue} init={fct.options[0]}/>}
+                    {fct.type === "text" && <Input label="Value :" placeholder="Text..." onChange={setInputValue}/>}
+                    {fct.type === "options" && <ListBox data={fct.options} setSelected={setInputValue} init={fct.options[0]}/>}
                     <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+props.item.function.cmd+" "+inputValue}</button>
                 </div>
             </Modal>}
@@ -198,18 +210,18 @@ function RunModal(props) {
     );
 }
 
-function DeleteModal(props) {
+function DeleteModal(props: any) {
     let { name } = useParams();
     const [deleted, setDeleted] = useState(false);
     useEffect(() => {
         if(deleted) {
             let body = {name:props.item.function};
-            Api.deleteDeviceFunction(body,name,props.item.setAlertData,props.item.alertData);
+            Api.deleteDeviceFunction(body,name,props.item.setState);
             props.item.setRender(!props.item.render);
             props.setModal(false)
             setDeleted(false);
         }
-    }, [deleted]);
+    }, [deleted,props,name]);
     return (
         <Modal
             open={props.modal}

@@ -1,1 +1,1 @@
-[{"name":"Manager","ip":"23","functions":["hmi"],"description":"Manager/Back/Front"},{"name":"ThinkPad","ip":"7","functions":["power","hmi","max7219","sound","cluster"],"description":"Linux 64"},{"name":"Raspberry","ip":"175","functions":["power","max7219","hmi"],"description":"Linux 32"}]
+[{"name":"Manager","ip":"23","functions":["hmi"],"description":"Manager/Back/Front"},{"name":"ThinkPad","ip":"7","functions":["power","hmi","max7219","sound","cluster"],"description":"Linux 64"},{"name":"Raspberry","ip":"175","functions":["power","hmi","ivi"],"description":"Linux 32"}]

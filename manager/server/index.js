@@ -7,7 +7,8 @@ const { exec } = require('child_process');
 const app = express();
 const PORT = process.env.PORT || 3001;
 // API File
-// import { Api } from "api.js";
+// import { init, equipements, services } from "api.js";
+const api = require("./api");
 /*****************/
 /***** Start *****/
 /*****************/
@@ -16,11 +17,11 @@ app.use(bodyParser.json());
 /***************/
 /***** API *****/
 /***************/
-init(app);
+api.init(app);
 /***************/
-equipements(app);
+api.equipements(app);
 /***************/
-services(app);
+api.services(app);
 /***************/
 app.get('*', (req, res) => {
     res.status(404).json({ "error": "Path does not exist" })

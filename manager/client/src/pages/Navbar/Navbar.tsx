@@ -12,7 +12,7 @@ const Navbar = () => {
     const logo = require("../../assets/logo512.png")
     useEffect(() => {
         setPath(window.location.pathname)
-    }, [window.location.pathname]);
+    }, []);
     return(
     <div>
         <nav>
@@ -24,8 +24,8 @@ const Navbar = () => {
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
                         <div className="flex space-x-4 items-center">
-                            {list.map((item,index) => (
-                                <li>
+                            {list.map((item: any,index: number) => (
+                                <li key={index}>
                                     <Link to={item.path} className={`flex justify-center btn btn-primary w-44 ${item.path === path && "btn-secondary"}`}>{item.name}</Link>
                                 </li>
                             ))}

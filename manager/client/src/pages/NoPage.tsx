@@ -1,7 +1,4 @@
-import { useState } from "react";
-
-export default function Function(props) {
-    const [modalAdd, setModalAdd] = useState(false);
+export default function Function() {
     return(
         <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
             <div className="flex pb-4 justify-between mx-6 ">

@@ -1,4 +1,4 @@
-export default function Input(props) {
+export default function Input(props: any) {
     return (
         <div className='grid grid-cols-4 '>
             <label className="self-center text-classic">{props.label}</label>
