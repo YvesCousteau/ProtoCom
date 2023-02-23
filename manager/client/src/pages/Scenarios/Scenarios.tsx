@@ -103,7 +103,7 @@ function Item(props: any) {
 function AddModal(props: any) {
     const [created, setCreated] = useState(false);
     const [optionsName, setOptionsName]: any = useState(null);
-    const [optionFirst, setOptionFirst]: any = useState(null);
+    const [optionSelected, setoptionSelected] = useState(null);
     const [inputDevice, setInputDevice] = useState(null);
     const [inputFct, setInputFct] = useState(null);
     const [inputOption, setInputOption] = useState(null);
@@ -119,6 +119,7 @@ function AddModal(props: any) {
         } else {
             Api.getOptions(setOptionsName, inputFct,props.setState);
         }
+        // setInputOption(optionsName[0]);
     }, [inputFct,inputOption,props.setState,props.functions]);
 
     return (
@@ -145,7 +146,7 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {optionsName && optionsName.length > 0  && <ListBox data={optionsName} setSelected={setInputOption} init={optionsName[0]}/>}
+                        {optionsName && optionsName.length > 0  && <ListBox data={optionsName} setSelected={setInputOption} init={optionsName[0]} />}
                     </div>
                 </div>
                 <button className='btn btn-open w-32 mx-auto' onClick={() => setCreated(true)}>Send</button>
