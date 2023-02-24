@@ -103,24 +103,54 @@ function Item(props: any) {
 function AddModal(props: any) {
     const [created, setCreated] = useState(false);
     const [optionsName, setOptionsName]: any = useState(null);
-    const [optionSelected, setoptionSelected] = useState(null);
+
     const [inputDevice, setInputDevice] = useState(null);
     const [inputFct, setInputFct] = useState(null);
     const [inputOption, setInputOption] = useState(null);
+
+    const [renderOptions, setRenderOptions] = useState(false);
+
     useEffect(() => {
         if(created) {
             console.log(inputDevice,inputFct,inputOption);
         }
     }, [created,inputDevice,inputFct,inputOption]);
 
+    // Device selection
     useEffect(() => {
-        if(!inputOption) {
+        if (!inputDevice && props.devices) {
+            setInputDevice(props.devices[0]);
+        }
+    }, [inputDevice,props.devices]);
+
+    // Function selection
+    useEffect(() => {
+        if (!inputFct && props.functions) {
+            setInputFct(props.functions[0]);
+        }
+    }, [inputFct,props.functions]);
+
+    useEffect(() => {
+        if(!inputFct) {
             Api.getOptions(setOptionsName, props.functions[0],props.setState);
         } else {
+            console.log("wddwdwd");
+            
             Api.getOptions(setOptionsName, inputFct,props.setState);
+            setRenderOptions(true);
         }
-        // setInputOption(optionsName[0]);
-    }, [inputFct,inputOption,props.setState,props.functions]);
+    }, [inputFct,props.setState,props.functions]);
+
+    // Option selection
+    useEffect(() => {
+        if (!inputOption && optionsName) {
+            setInputOption(optionsName[0]);
+        } else if(renderOptions && optionsName) {
+            console.log("wddwdwd");
+            setInputOption(optionsName[0]);
+            setRenderOptions(false);
+        }
+    }, [inputOption,optionsName,inputFct]);
 
     return (
         <Modal
@@ -132,21 +162,19 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.devices.length > 0  && <ListBox data={props.devices} setSelected={setInputDevice} init={props.devices[0]}/>}
-                    </div>
-                </div>
-
-                
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Name :&nbsp;</p>
-                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.functions.length > 0  && <ListBox data={props.functions} setSelected={setInputFct} init={props.functions[0]}/>}
+                        {props.devices.length > 0  && <ListBox data={props.devices} setSelected={setInputDevice} selected={inputDevice}/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {optionsName && optionsName.length > 0  && <ListBox data={optionsName} setSelected={setInputOption} init={optionsName[0]} />}
+                        {props.functions  && <ListBox data={props.functions} setSelected={setInputFct} selected={inputFct}/>}
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Name :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        {optionsName && <ListBox data={optionsName} setSelected={setInputOption} selected={inputOption}/>}
                     </div>
                 </div>
                 <button className='btn btn-open w-32 mx-auto' onClick={() => setCreated(true)}>Send</button>

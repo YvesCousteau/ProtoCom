@@ -129,6 +129,13 @@ function AddModal(props: any) {
         }
     }, [created, inputName, name, props]);
     
+    // Function selection
+    useEffect(() => {
+        if (!inputName && props.functions) {
+            setInputName(props.functions[0]);
+        }
+    }, [inputName,props.functions]);
+
     return (
         <Modal
             open={props.modal}
@@ -139,7 +146,7 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.functions.length > 0  && <ListBox data={props.functions} setSelected={setInputName} init={props.functions[0]}/>}
+                        {props.functions.length > 0  && <ListBox data={props.functions} setSelected={setInputName} selected={inputName}/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
@@ -223,7 +230,7 @@ function RunModal(props: any) {
                 title="Update"
                 subtitle={"Run the service : " + fct.name}>
                 <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                    <ListBox data={fct.options} setSelected={setInputValue} init={fct.options[0]}/>
+                    <ListBox data={fct.options} setSelected={setInputValue} selected={fct.options[0]}/>
                     <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+props.item.function.cmd+" "+inputValue}</button>
                 </div>
             </Modal>}
