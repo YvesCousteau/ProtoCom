@@ -71,6 +71,8 @@ export default function Scenarios() {
                         key={index} 
                         scenario={scenario} 
                         index={index}
+                        devices={devices}
+                        setState={setState}
                         setRender={setRender} 
                         render={render}/>
                     )}
@@ -95,7 +97,15 @@ function Item(props: any) {
     useEffect(() => {
         if (ran) {
             console.log("Run");
-            // Api.service(fct.api, props.item.device.ip, inputValue, props.item.setState);
+            for (const item of props.scenario.scenario) {
+                let ip;
+                for(const device of props.devices) {
+                    if (device.name === item.device) {
+                        ip = device.ip;
+                    }
+                }
+                Api.service("api/service/" + item.function, ip, item.arg, props.setState);
+            }
             setRan(false)   
         }
     }, [ran]);
