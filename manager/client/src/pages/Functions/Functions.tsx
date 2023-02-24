@@ -17,7 +17,7 @@ export default function Functions() {
     const [state, setState]: any = useState(null);
     const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
 
-    const [render, setRender] = useState(null);
+    const [render, setRender] = useState(false);
 
     // Render device functions name
     useEffect(() => {
@@ -68,10 +68,11 @@ export default function Functions() {
                     {deviceFunctions && deviceFunctions.length > 0 && deviceFunctions.map((fct: any,index: number) => 
                         <Item 
                         key={index}
+
                         function={fct}
                         device={device}
                         setState={setState}
-                        
+                        index={index}
                         setRender={setRender}
                         render={render} />
 
@@ -162,8 +163,8 @@ function DeleteModal(props: any) {
     let { name } = useParams();
     const [deleted, setDeleted] = useState(false);
     useEffect(() => {
-        if(deleted) {
-            let body = {name:props.item.function};
+        if (deleted) {
+            let body = { id: props.item.index };
             Api.deleteDeviceFunction(body,name,props.item.setState);
             props.item.setRender(!props.item.render);
             props.setModal(false)

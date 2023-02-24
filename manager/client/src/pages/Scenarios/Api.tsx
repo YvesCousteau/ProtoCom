@@ -74,6 +74,48 @@ export function getOptions(setValue: any, name: any, setState: any) {
     }
 }
 
+export function addScenario(body: any, setState: any) {
+    try {
+        let result = fetch("/api/scenario", {
+            method: 'POST',
+            headers: {
+                Accept: 'application.json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        result.then((sucess) => {
+            console.log(sucess);
+            if (sucess.ok) {
+                setState({ state: 'Success', url: sucess.url })
+            } else {
+                setState({ state: 'Error', url: sucess.url })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-
-
+export function deleteScenario(body: any, setState: any) {
+    try {
+        let result = fetch("/api/scenario", {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application.json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        result.then((sucess) => {
+            console.log(sucess);
+            if (sucess.ok) {
+                setState({ state: 'Success', url: sucess.url })
+            } else {
+                setState({ state: 'Error', url: sucess.url })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -108,7 +108,7 @@ function equipements(app) {
     app.post("/api/device/:name", (req, res, next) => {
         const name = req.params.name;
         var errors = []
-        if (devices.devices == {}) {
+        if (devices == {}) {
             res.status(400).json({ "error": "No device" });
             return;
         }
@@ -141,14 +141,14 @@ function equipements(app) {
     });
     // DeleteDeviceFunction
     app.delete("/api/device/:name", (req, res, next) => {
-        const name = req.body.name;
+        const id = req.body.id;
         var errors = []
         if (devices == {}) {
             res.status(400).json({ "error": "No device" });
             return;
         }
-        if (!name) {
-            errors.push("No name specified");
+        if (id == null) {
+            errors.push("No id specified");
         }
         if (errors.length) {
             res.status(400).json({ "error": errors.join(",") });
@@ -157,28 +157,68 @@ function equipements(app) {
         // Select the right Device
         for (const item of devices) {
             if (item.name == req.params.name) {
-                // Check if we can remove the function
-                if (item.functions.includes(name) && item.functions) {
-                    let counter = 0;
-                    // Search where is the function 
-                    for (const fct of item.functions) {
-                        // Check if where the function has to be remove
-                        if (fct == name) {
-                            item.functions.splice(counter, 1);
-                            fs.writeFile(devicesName, JSON.stringify(devices), function writeJSON(err) {
-                                if (err) return console.log(err);
-                            });
-                            console.log(item.functions);
-                            res.json({ "message": "success" })
-                            return;
-                        }
-                        counter = counter + 1;
-                    }
-                }
-
+                item.functions.splice(id, 1);
+                fs.writeFile(devicesName, JSON.stringify(devices), function writeJSON(err) {
+                    if (err) return console.log(err);
+                });
+                res.json({ "message": "success" })
+                return;
             }
         }
         res.status(400).json({ "error": "No device" });
+        return;
+    });
+    // AddScenarioFunction
+    app.post("/api/scenario", (req, res, next) => {
+        var errors = []
+        if (scenarios == {}) {
+            res.status(400).json({ "error": "No scenario" });
+            return;
+        }
+        if (!req.body.name) {
+            errors.push("No name specified");
+        }
+        if (!req.body.scenario) {
+            errors.push("No scenario specified");
+        }
+        if (errors.length) {
+            res.status(400).json({ "error": errors.join(",") });
+            return;
+        }
+        for (const item of scenarios) {
+            if (item.name == req.body.name) {
+                res.status(400).json({ "error": "Name already used" });
+                return;
+            }
+        }
+        const newScenario = scenarios;
+        newScenario.push(req.body);
+        fs.writeFile(scenariosName, JSON.stringify(newScenario), function writeJSON(err) {
+            if (err) return console.log(err);
+        });
+        res.json({ "message": "success" })
+        return;
+    });
+    // DeleteDeviceFunction
+    app.delete("/api/scenario", (req, res, next) => {
+        const id = req.body.id;
+        var errors = []
+        if (devices == {}) {
+            res.status(400).json({ "error": "No scenario" });
+            return;
+        }
+        if (id == null) {
+            errors.push("No id specified");
+        }
+        if (errors.length) {
+            res.status(400).json({ "error": errors.join(",") });
+            return;
+        }
+        scenarios.splice(id, 1);
+        fs.writeFile(devicesName, JSON.stringify(devices), function writeJSON(err) {
+            if (err) return console.log(err);
+        });
+        res.json({ "message": "success" })
         return;
     });
 }

@@ -4,6 +4,7 @@ import * as Api from "./Api";
 import Alert from "../../components/Alert";
 import Modal from "../../components/Modal";
 import ListBox from "../../components/ListBox";
+import Input from "../../components/Input";
 
 export default function Scenarios() {
     const [modalAdd, setModalAdd] = useState(false);
@@ -15,9 +16,12 @@ export default function Scenarios() {
     // Alert Message
     const [state, setState]: any = useState(null);
     const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
+
+    const [render, setRender] = useState(false);
+
     useEffect(() => {
         Api.getScenarios(setScenarios, setState);
-    }, []);
+    }, [render]);
     useEffect(() => {
         Api.getDevices(setDevices, setState);
         Api.getFunctions(setFunctions, setState);
@@ -63,7 +67,12 @@ export default function Scenarios() {
                 </div>
                 <div className="grid grid-cols-1 gap-4 justify-items-center mx-6">
                     {scenarios && scenarios.length > 0 && scenarios.map((scenario: any, index: number) => 
-                        <Item  key={index} scenario={scenario}/>
+                        <Item 
+                        key={index} 
+                        scenario={scenario} 
+                        index={index}
+                        setRender={setRender} 
+                        render={render}/>
                     )}
                 </div>
             </div>
@@ -73,21 +82,23 @@ export default function Scenarios() {
             functions={functionsName}
             devices={devicesName}
             setState={setState}
-
+            setRender={setRender} 
+            render={render}
             />}
             <Alert alert={alert}/>
         </div>
     );
 }
 function Item(props: any) {
+    const [modalDelete, setModalDelete] = useState(false);
     return(
         <div className='w-full'>
-            <Paper title={"Scenario : "+props.scenario.name} removable={true}>
+            <Paper title={"Scenario : " + props.scenario.name} deleted={setModalDelete}  removable={true}>
                 {props.scenario.scenario.map((item: any, index: number) => 
                     <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
                         <p className="text-classic pb-1">{"Device: "+item.device}</p>
                         <p className="text-classic pb-1">{"Function: "+item.function}</p>
-                        <p className="text-classic pb-1">{"Argument: "+item.function}</p>
+                        <p className="text-classic pb-1">{"Argument: " + item.arg}</p>
                     </div> 
                 )}
                 <div className="flex justify-center">
@@ -96,21 +107,30 @@ function Item(props: any) {
                     </button>
                 </div>
             </Paper>
+            <DeleteModal modal={modalDelete} setModal={setModalDelete} item={props} />
         </div>
     );
 }
 
 function AddModal(props: any) {
     const [created, setCreated] = useState(false);
+    const [added, setAdded] = useState(false);
     const [optionsName, setOptionsName]: any = useState(null);
 
     const [inputDevice, setInputDevice] = useState(null);
     const [inputFct, setInputFct] = useState(null);
     const [inputOption, setInputOption] = useState(null);
+    const [inputName, setInputName] = useState(null);
+
+    const [scenario, setScenario]: any = useState([]);
 
     useEffect(() => {
-        if(created) {
-            console.log(inputDevice,inputFct,inputOption);
+        if(created && scenario) {
+            console.log(scenario);
+            const body = { name: inputName, scenario: scenario }
+            Api.addScenario(body,props.setState);
+            props.setModal(false);
+            props.setRender(!props.render);
         }
     }, [created,inputDevice,inputFct,inputOption]);
 
@@ -145,13 +165,21 @@ function AddModal(props: any) {
         } 
     }, [optionsName]);
 
+    useEffect(() => {
+        if (added && inputDevice && inputFct && inputOption) {
+            setScenario([...scenario,{ device: inputDevice, function: inputFct, arg: inputOption }])
+            setAdded(false);
+        }
+    }, [added]);
+
     return (
         <Modal
             open={props.modal}
             setOpen={props.setModal}
             title="Add"
-            subtitle="Setup your device">
+            subtitle="Setup your scenario">
             <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                <Input label="Name :" placeholder="Text..." onChange={setInputName} />
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
@@ -170,28 +198,42 @@ function AddModal(props: any) {
                         {optionsName && <ListBox data={optionsName} setSelected={setInputOption} selected={inputOption}/>}
                     </div>
                 </div>
-                <button className='btn btn-open w-32 mx-auto' onClick={() => setCreated(true)}>Send</button>
+                <div className="ml-40 grid grid-cols-2 gap-4">
+                    <button className='btn btn-classic w-32 mx-auto' onClick={() => setAdded(true)}>Add Item</button>
+                    <button className='btn btn-open w-32 mx-auto' onClick={() => setCreated(true)} disabled={scenario === null}>Send</button>
+                </div>
+                {scenario && scenario.length > 0 && scenario.map((item: any, index: number) =>
+                    <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
+                        <p className="text-classic pb-1">{"Device: " + item.device}</p>
+                        <p className="text-classic pb-1">{"Function: " + item.function}</p>
+                        <p className="text-classic pb-1">{"Argument: " + item.arg}</p>
+                    </div>
+                )}
             </div>
         </Modal>
     );
 }
 
-// function DeleteModal(props: any) {
-//     const [deleted, setDeleted] = useState(false);
-//     useEffect(() => {
-//         if(deleted) {
-            
-//         }
-//     }, [deleted]);
-//     return (
-//         <Modal
-//             open={props.modal}
-//             setOpen={props.setModal}
-//             title="Remove"
-//             subtitle="All functions associated with this devices will be remove">
-//             <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-//                 <button className='btn btn-open w-32 mx-auto' onClick={() => setDeleted(true)}>Remove</button>
-//             </div>
-//         </Modal>
-//     );
-// }
+function DeleteModal(props: any) {
+    const [deleted, setDeleted] = useState(false);
+    useEffect(() => {
+        if(deleted) {
+            const body = {id: props.item.index};
+            Api.deleteScenario(body, props.item.setState)
+            props.setModal(false);
+            props.item.setRender(!props.item.render);
+            setDeleted(false);
+        }
+    }, [deleted, props]);
+    return (
+        <Modal
+            open={props.modal}
+            setOpen={props.setModal}
+            title="Remove"
+            subtitle="All functions associated with this devices will be remove">
+            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                <button className='btn btn-open w-32 mx-auto' onClick={() => setDeleted(true)}>Remove</button>
+            </div>
+        </Modal>
+    );
+}
