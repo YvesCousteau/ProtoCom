@@ -133,9 +133,9 @@ function AddModal(props: any) {
     useEffect(() => {
         if(!inputFct) {
             Api.getOptions(setOptionsName, props.functions[0],props.setState);
-        } else {
-            console.log("wddwdwd");
-            
+        } 
+        else {
+            console.log("la on change les options");
             Api.getOptions(setOptionsName, inputFct,props.setState);
             setRenderOptions(true);
         }
@@ -145,12 +145,13 @@ function AddModal(props: any) {
     useEffect(() => {
         if (!inputOption && optionsName) {
             setInputOption(optionsName[0]);
-        } else if(renderOptions && optionsName) {
-            console.log("wddwdwd");
+        } 
+        else if(renderOptions && optionsName) {
+            console.log("la on change la premiere option");
             setInputOption(optionsName[0]);
             setRenderOptions(false);
         }
-    }, [inputOption,optionsName,inputFct]);
+    }, [optionsName]);
 
     return (
         <Modal
