@@ -91,6 +91,14 @@ export default function Scenarios() {
 }
 function Item(props: any) {
     const [modalDelete, setModalDelete] = useState(false);
+    const [ran, setRan] = useState(false);
+    useEffect(() => {
+        if (ran) {
+            console.log("Run");
+            // Api.service(fct.api, props.item.device.ip, inputValue, props.item.setState);
+            setRan(false)   
+        }
+    }, [ran]);
     return(
         <div className='w-full'>
             <Paper title={"Scenario : " + props.scenario.name} deleted={setModalDelete}  removable={true}>
@@ -102,7 +110,7 @@ function Item(props: any) {
                     </div> 
                 )}
                 <div className="flex justify-center">
-                    <button onClick={() => console.log('Run scenario here')} className="mt-4 btn btn-classic w-80">
+                    <button onClick={() => setRan(true)} className="mt-4 btn btn-classic w-80">
                         Run
                     </button>
                 </div>
@@ -131,8 +139,9 @@ function AddModal(props: any) {
             Api.addScenario(body,props.setState);
             props.setModal(false);
             props.setRender(!props.render);
+            setCreated(false)
         }
-    }, [created,inputDevice,inputFct,inputOption]);
+    }, [created, inputDevice, inputFct, inputOption, inputName, scenario, props]);
 
     // Device selection
     useEffect(() => {
@@ -170,7 +179,7 @@ function AddModal(props: any) {
             setScenario([...scenario,{ device: inputDevice, function: inputFct, arg: inputOption }])
             setAdded(false);
         }
-    }, [added]);
+    }, [added, inputDevice, inputFct, inputOption, scenario]);
 
     return (
         <Modal

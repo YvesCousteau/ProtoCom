@@ -75,8 +75,6 @@ export default function Functions() {
                         index={index}
                         setRender={setRender}
                         render={render} />
-
-                        
                     )}
                 </div>
             </div>
@@ -188,40 +186,18 @@ function RunModal(props: any) {
     const [ran, setRan] = useState(false);
     const [inputValue, setInputValue] = useState('');
     useEffect(() => {
-        if(props.modal) {
+        if (props.modal) {
             Api.getFunction(setFct, props.item.function, props.item.setState);
         }
+    }, [props]);
+    useEffect(() => {
         if(ran) {
             if (fct) {
-                switch (fct.name) {
-                    case "sound":
-                        console.log("sound");
-                        Api.sound(props.item.device.ip, inputValue, props.item.setState);
-                        break;
-                    case "power":
-                        console.log("power");
-                        Api.power(props.item.device.ip, inputValue, props.item.setState);
-                        break;
-                    case "max7219":
-                        console.log("max7219");
-                        Api.max7219(props.item.device.ip, inputValue, props.item.setState);
-                        break;
-                    case "cluster":
-                        console.log("cluster");
-                        Api.cluster(props.item.device.ip, inputValue, props.item.setState);
-                        break;
-                    case "ivi":
-                        console.log("ivi");
-                        Api.ivi(props.item.device.ip, inputValue, props.item.setState);
-                        break;
-                    default:
-                        break;
-                }
+                Api.service(fct.api, props.item.device.ip, inputValue, props.item.setState);
                 props.setModal(false);
                 setRan(false);
             }
         }
-            
     }, [ran, fct, inputValue, props]);
     return (
         <>

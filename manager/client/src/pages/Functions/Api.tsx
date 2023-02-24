@@ -99,90 +99,17 @@ export function deleteDeviceFunction(body: any, name: any, setState: any) {
         console.log(error);
     }
 }
-
-export function power(ip: string, option: string, setState: any) {
+export function service(api: string, ip: string, option: string, setState: any) {
     try {
-        let result = fetch("/api/service/power/"+option+"/"+ip, {
+        let result = fetch(api + option + "/" + ip, {
             method: 'POST',
         })
-        result.then((sucess) => { 
+        result.then((sucess) => {
             console.log(sucess)
-            if (sucess.ok) { 
-                setState({ state: 'Success', url: sucess.url }) 
-            } else { 
-                setState({ state: 'Error', url: sucess.url }) 
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export function max7219(ip: string, intput: string, setState: any) {
-    try {
-        let result = fetch("/api/service/max7219/"+intput+"/"+ip, {
-            method: 'POST',
-        })
-        result.then((sucess) => { 
-            console.log(sucess)
-            if (sucess.ok) { 
-                setState({ state: 'Success', url: sucess.url }) 
-            } else { 
-                setState({ state: 'Error', url: sucess.url }) 
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export function cluster(ip: string, option: string, setState: any) {
-    try {
-        let result = fetch("/api/service/cluster/"+option+"/"+ip, {
-            method: 'POST',
-        })
-        result.then((sucess) => { 
-            console.log(sucess)
-            if (sucess.ok) { 
-                setState({ state: 'Success', url: sucess.url }) 
-            } else { 
-                setState({ state: 'Error', url: sucess.url }) 
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export function ivi(ip: string, option: string, setState: any) {
-    try {
-        let result = fetch("/api/service/ivi/"+option+"/"+ip, {
-            method: 'POST',
-        })
-        result.then((sucess) => { 
-            console.log(sucess)
-            if (sucess.ok) { 
-                setState({ state: 'Success', url: sucess.url }) 
-            } else { 
-                setState({ state: 'Error', url: sucess.url }) 
-            }
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export function sound(ip: string, option: string, setState: any) {
-    try {
-        let result = fetch("/api/service/sound/"+option+"/"+ip, {
-            method: 'POST',
-        })
-        result.then((sucess) => { 
-            console.log(sucess)
-            if (sucess.ok) { 
-                setState({ state: 'Success', url: sucess.url }) 
-            } else { 
-                setState({ state: 'Error', url: sucess.url }) 
+            if (sucess.ok) {
+                setState({ state: 'Success', url: sucess.url })
+            } else {
+                setState({ state: 'Error', url: sucess.url })
             }
         })
     } catch (error) {

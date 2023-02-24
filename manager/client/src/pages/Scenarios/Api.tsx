@@ -119,3 +119,20 @@ export function deleteScenario(body: any, setState: any) {
         console.log(error);
     }
 }
+export function service(api: string, ip: string, option: string, setState: any) {
+    try {
+        let result = fetch(api + option + "/" + ip, {
+            method: 'POST',
+        })
+        result.then((sucess) => {
+            console.log(sucess)
+            if (sucess.ok) {
+                setState({ state: 'Success', url: sucess.url })
+            } else {
+                setState({ state: 'Error', url: sucess.url })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
