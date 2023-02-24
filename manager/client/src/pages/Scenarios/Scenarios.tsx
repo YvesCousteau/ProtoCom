@@ -108,8 +108,6 @@ function AddModal(props: any) {
     const [inputFct, setInputFct] = useState(null);
     const [inputOption, setInputOption] = useState(null);
 
-    const [renderOptions, setRenderOptions] = useState(false);
-
     useEffect(() => {
         if(created) {
             console.log(inputDevice,inputFct,inputOption);
@@ -137,20 +135,14 @@ function AddModal(props: any) {
         else {
             console.log("la on change les options");
             Api.getOptions(setOptionsName, inputFct,props.setState);
-            setRenderOptions(true);
         }
     }, [inputFct,props.setState,props.functions]);
 
     // Option selection
     useEffect(() => {
-        if (!inputOption && optionsName) {
+        if (optionsName) {
             setInputOption(optionsName[0]);
         } 
-        else if(renderOptions && optionsName) {
-            console.log("la on change la premiere option");
-            setInputOption(optionsName[0]);
-            setRenderOptions(false);
-        }
     }, [optionsName]);
 
     return (
