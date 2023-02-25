@@ -11,7 +11,6 @@ export default function Scenarios() {
     const [devices, setDevices]: any = useState([]);
     const [devicesName, setDevicesName]: any = useState(null);
     const [functions, setFunctions]: any = useState([]);
-    const [functionsName, setFunctionsName]: any = useState(null);
     const [scenarios, setScenarios] = useState([]);
     // Alert Message
     const [state, setState]: any = useState(null);
@@ -24,7 +23,6 @@ export default function Scenarios() {
     }, [render]);
     useEffect(() => {
         Api.getDevices(setDevices, setState);
-        Api.getFunctions(setFunctions, setState);
     }, []);
     useEffect(() => {
         if (state) {
@@ -32,16 +30,6 @@ export default function Scenarios() {
             setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
         }
     }, [state]);
-    // Get Functions Name
-    useEffect(() => {
-        if(functions) {
-            const listFunctions: any = [];
-            for(const item of functions) {
-                listFunctions.push(item.name);
-            }
-            setFunctionsName(listFunctions);
-        }
-    }, [functions]);
     // Get Devices Name
     useEffect(() => {
         if(devices) {
@@ -81,7 +69,6 @@ export default function Scenarios() {
             {devicesName && devicesName.length > 0 && <AddModal 
             modal={modalAdd}
             setModal={setModalAdd} 
-            functions={functionsName}
             devices={devicesName}
             setState={setState}
             setRender={setRender} 
@@ -133,8 +120,8 @@ function Item(props: any) {
 function AddModal(props: any) {
     const [created, setCreated] = useState(false);
     const [added, setAdded] = useState(false);
+    const [functionsName, setFunctionsName]: any = useState(null);
     const [optionsName, setOptionsName]: any = useState(null);
-
     const [inputDevice, setInputDevice] = useState(null);
     const [inputFct, setInputFct] = useState(null);
     const [inputOption, setInputOption] = useState(null);
@@ -160,22 +147,32 @@ function AddModal(props: any) {
         }
     }, [inputDevice,props.devices]);
 
-    // Function selection
+    // -----------------------------------------------------------------------
     useEffect(() => {
-        if (!inputFct && props.functions) {
-            setInputFct(props.functions[0]);
-        }
-    }, [inputFct,props.functions]);
-
-    useEffect(() => {
-        if(!inputFct) {
-            Api.getOptions(setOptionsName, props.functions[0],props.setState);
+        if(!inputDevice) {
+            Api.getDeviceFunctions(setFunctionsName, props.devices[0],props.setState);
         } 
         else {
             console.log("la on change les options");
-            Api.getOptions(setOptionsName, inputFct,props.setState);
+            Api.getDeviceFunctions(setFunctionsName, inputDevice,props.setState);
         }
-    }, [inputFct,props.setState,props.functions]);
+    }, [inputDevice,props.setState,props.devices]);
+    // Function selection
+    useEffect(() => {
+        if (functionsName) {
+            setInputFct(functionsName[0]);
+        }
+    }, [functionsName]);
+
+    useEffect(() => {
+        if(!inputFct && functionsName) {
+            Api.getFunctionOptions(setOptionsName, functionsName[0],props.setState);
+        } 
+        else {
+            console.log("la on change les options");
+            Api.getFunctionOptions(setOptionsName, inputFct,props.setState);
+        }
+    }, [inputFct,props.setState,functionsName]);
 
     // Option selection
     useEffect(() => {
@@ -208,7 +205,7 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.functions  && <ListBox data={props.functions} setSelected={setInputFct} selected={inputFct}/>}
+                        {functionsName  && <ListBox data={functionsName} setSelected={setInputFct} selected={inputFct}/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
