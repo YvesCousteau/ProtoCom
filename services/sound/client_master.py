@@ -6,6 +6,7 @@ import threading, wave, pyaudio, time, queue
 port = 9633
 bufferSize = 65536
 ip = sys.argv[1]
+q = queue.Queue(maxsize=2000)
 chunk = 10*1024
 p = pyaudio.PyAudio()
 
