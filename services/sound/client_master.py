@@ -31,7 +31,7 @@ except socket.error as err:
 stream = p.open(
     format=p.get_format_from_width(2),
     channels=2,
-    rate=44100,
+    rate=3000,
     output=True,
     frames_per_buffer=chunk
 )
