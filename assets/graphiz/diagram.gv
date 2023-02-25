@@ -1,0 +1,6 @@
+graph G {
+	Manager -- power [label=reboot]
+	Manager -- ivi [label=powerView]
+	ThinkPad -- power [label=reboot]
+	Raspberry -- cluster [label=swapCarModeLeft]
+}
