@@ -9,6 +9,11 @@ ip = sys.argv[1]
 chunk = 10*1024
 p = pyaudio.PyAudio()
 
+def getAudioData():
+    while True:
+        frame,_= sock.recvfrom(bufferSize)
+        q.put(frame)
+        print('Queue size...',q.qsize())
 
 msgFromClient = {"value":sys.argv[2]}
 bytesToSend = json.dumps(msgFromClient).encode()
@@ -45,9 +50,5 @@ while True:
 
 sock.close()
 
-def getAudioData():
-    while True:
-        frame,_= sock.recvfrom(bufferSize)
-        q.put(frame)
-        print('Queue size...',q.qsize())
+
 
