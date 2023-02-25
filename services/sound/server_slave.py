@@ -37,6 +37,7 @@ while True:
         while True:
             data = wf.readframes(chunk)
             sock.sendto(data,address)
-            time.sleep(0.8*chunk/sample_rate)
+            # time.sleep(0.8*chunk/sample_rate)
+            time.sleep(0.2*chunk/sample_rate)
         
         sock.sendto(msg,address)
