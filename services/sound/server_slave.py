@@ -7,7 +7,6 @@ import threading, wave, pyaudio, time
 port = 9633
 bufferSize = 65536
 ip = sys.argv[1]
-# chunk = 10*1024
 chunk = 1024
 wf = wave.open("../../assets/file_example.wav")
 p = pyaudio.PyAudio()
@@ -20,9 +19,6 @@ print("Socket created ...")
 sock.bind((ip, port))
 print("Server up and listening on : "+ip+" / "+str(port))
 print('server listening at',(ip, (port)))
-print("channels ",wf.getnchannels())
-print("format ",wf.getsampwidth())
-print("rate ",wf.getframerate())
 stream = p.open(
     format=p.get_format_from_width(wf.getsampwidth()),
     channels=wf.getnchannels(),
