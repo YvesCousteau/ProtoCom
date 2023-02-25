@@ -15,7 +15,7 @@
         "client":"client_master.py",
         "server":"server_slave.py",
         "removable":true,
-        "options":["home","exit"]
+        "options":["play","stop"]
     },
     {
         "name":"ivi",
