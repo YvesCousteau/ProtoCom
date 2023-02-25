@@ -2,15 +2,20 @@ import socket
 import sys
 import json
 import os
-import threading, wave, pyaudio, time
+import threading, wave, pyaudio, time, queue
 
 port = 9633
 bufferSize = 65536
 ip = sys.argv[1]
-# chunk = 10*1024
 chunk = 1024
-wf = wave.open("../../assets/file_example.wav")
 p = pyaudio.PyAudio()
+q = queue.Queue(maxsize=2000)
+
+def getAudioData():
+    while True:
+        frame,_= sock.recvfrom(bufferSize)
+        q.put(frame)
+        print('Queue size...',q.qsize())
 
 # Create a datagram socket
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -18,11 +23,39 @@ sock.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,bufferSize)
 print("Socket created ...")
 # Bind to address and ip
 sock.bind((ip, port))
-print("Server up and listening on : "+ip+":"+port)
+print("Server up and listening on : "+ip+":"+str(port))
 
-print("channels ",wf.getnchannels())
-print("format ",wf.getsampwidth())
-print("rate ",wf.getframerate())
+stream = p.open(
+    format=p.get_format_from_width(2),
+    channels=1,
+    rate=22050,
+    output=True,
+    frames_per_buffer=chunk
+)
+
+# t1 = threading.Thread(target=getAudioData, args=())
+# t1.start()
+time.sleep(1)
+
+print('Now Playing...')
+while True:
+    frame,_= sock.recvfrom(bufferSize)
+    stream.write(frame)
+    print('Queue size...',q.qsize())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 message = b'Hello'
 sock.sendto(message,(ip,port))
