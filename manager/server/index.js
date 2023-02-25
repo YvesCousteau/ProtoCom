@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 /***************/
 api.init(app);
 /***************/
+api.fcts(app);
 api.equipements(app);
 /***************/
 api.services(app);

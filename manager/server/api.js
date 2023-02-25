@@ -21,8 +21,7 @@ function init(app) {
     });
     
 }
-
-function equipements(app) {
+function fcts(app) {
     // Ping Device
     app.get("/api/ping/:ip", (req, res) => {
         try {
@@ -33,7 +32,7 @@ function equipements(app) {
                     stdout = true;
                 }
                 res.json({ 
-                    "message": system.ip + req.params.ip + " ...",
+                    "message":"success",
                     "data": stdout
                 })
             });
@@ -43,6 +42,22 @@ function equipements(app) {
             return;
         }
     });
+    // Diagram Devices
+    app.get("/api/diagram", (req, res) => {
+        try {
+            exec("python3 ../../assets/graphiz/graphiz.py", function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
+        } catch {
+            console.log("error");
+            res.status(400).json({ "error": "No device up" });
+            return;
+        }
+    });
+}
+function equipements(app) {
     // GetDevices
     app.get("/api/devices", (req, res, next) => {
         if (devices == {}) {
@@ -250,18 +265,25 @@ function services(app) {
     // ServicePower
     app.post("/api/service/power/:option/:ip", (req, res) => {
         try {
-            exec('python3 ../services/power/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option)
+            exec('python3 ../services/power/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option, function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
         } catch {
             console.log("error");
             res.status(400).json({ "error": "No service power" });
             return;
         }
-        res.json({ "message": system.ip + req.params.ip + " is " + req.params.option + " ..." });
     });
     // ServiceSound
     app.post("/api/service/sound/:output/:ip", (req, res) => {
         try {
-            exec('python3 ../services/sound/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.output)
+            exec('python3 ../services/sound/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option, function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
         } catch {
             console.log("error");
             res.status(400).json({ "error": "No service sound" });
@@ -272,7 +294,11 @@ function services(app) {
     // ServiceMax7219
     app.post("/api/service/max7219/:output/:ip", (req, res) => {
         try {
-            exec('python3 ../services/max7219/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.output)
+            exec('python3 ../services/max7219/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option, function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
         } catch {
             console.log("error");
             res.status(400).json({ "error": "No service max7219" });
@@ -283,25 +309,31 @@ function services(app) {
     // ServiceCluster
     app.post("/api/service/cluster/:option/:ip/", (req, res) => {
         try {
-            exec('python3 ../services/cluster/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option)
+            exec('python3 ../services/cluster/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option, function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
         } catch {
             console.log("error");
             res.status(400).json({ "error": "No service HMI" });
             return;
         }
-        res.json({ "message": system.ip + req.params.ip + " is " + req.params.option + " ..." });
     });
     // ServiceIvi
     app.post("/api/service/ivi/:option/:ip/", (req, res) => {
         try {
-            exec('python3 ../services/ivi/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option)
+            exec('python3 ../services/ivi/client_master.py ' + system.ip + req.params.ip + ' ' + req.params.option, function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
         } catch {
             console.log("error");
             res.status(400).json({ "error": "No service HMI" });
             return;
         }
-        res.json({ "message": system.ip + req.params.ip + " is " + req.params.option + " ..." });
     });
 }
 
-module.exports = { equipements, services, init };
+module.exports = { equipements, services, fcts, init };

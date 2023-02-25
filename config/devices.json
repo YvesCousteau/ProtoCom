@@ -3,7 +3,8 @@
         "name": "Manager",
         "ip": "23",
         "functions": [
-            "power"
+            "power",
+            "max7219"
         ],
         "description": "Manager/Back/Front"
     },
@@ -13,7 +14,8 @@
         "functions": [
             "power",
             "sound",
-            "max7219"
+            "cluster",
+            "ivi"
         ],
         "description": "Linux 64"
     },
@@ -22,8 +24,9 @@
         "ip": "175",
         "functions": [
             "power",
-            "cluster",
-            "max7219"
+            "max7219",
+            "sound",
+            "cluster"
         ],
         "description": "Linux 32"
     }

@@ -1,7 +1,7 @@
 [
     {
         "name":"power",
-        "dir":"../services/power",
+        "com":"bash",
         "api": "api/services/power/",
         "client":"client_master.py",
         "server":"server_slave.py",
@@ -10,7 +10,7 @@
     },
     {
         "name":"sound",
-        "dir":"../services/sound",
+        "com":"alsa",
         "api": "api/services/sound/",
         "client":"client_master.py",
         "server":"server_slave.py",
@@ -19,7 +19,7 @@
     },
     {
         "name":"ivi",
-        "dir":"../services/ivi",
+        "com":"unity",
         "api": "api/services/ivi/",
         "client":"client_master.py",
         "server":"server_slave.py",
@@ -43,7 +43,7 @@
     },
     {
         "name":"cluster",
-        "dir":"../services/cluster",
+        "com":"unity",
         "api": "api/services/cluster/",
         "client":"client_master.py",
         "server":"server_slave.py",
@@ -69,7 +69,7 @@
     },
     {
         "name":"max7219",
-        "dir":"../services/max7219",
+        "com":"uart",
         "api": "api/services/max7219/",
         "client":"client_master.py",
         "server":"server_slave.py",
