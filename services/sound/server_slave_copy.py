@@ -18,11 +18,15 @@ sock.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,bufferSize)
 print("Socket created ...")
 # Bind to address and ip
 sock.bind((ip, port))
-print("Server up and listening on : "+ip+" / "+str(port))
-print('server listening at',(ip, (port)))
+print("Server up and listening on : "+ip+":"+port)
+
 print("channels ",wf.getnchannels())
 print("format ",wf.getsampwidth())
 print("rate ",wf.getframerate())
+
+message = b'Hello'
+sock.sendto(message,(ip,port))
+
 stream = p.open(
     format=p.get_format_from_width(wf.getsampwidth()),
     channels=wf.getnchannels(),

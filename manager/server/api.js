@@ -125,7 +125,7 @@ function equipements(app) {
                 // Check if we can add the function
                 if (!item.functions.includes(req.body.name)) {
                     item.functions.push(req.body.name);
-                    fs.writeFile(devicesName, JSON.stringify(devices), function writeJSON(err) {
+                    fs.writeFile(devicesName, JSON.stringify(devices, null, 4), function writeJSON(err) {
                         if (err) return console.log(err);
                     });
                     res.json({ "message": "success" })
@@ -158,7 +158,7 @@ function equipements(app) {
         for (const item of devices) {
             if (item.name == req.params.name) {
                 item.functions.splice(id, 1);
-                fs.writeFile(devicesName, JSON.stringify(devices), function writeJSON(err) {
+                fs.writeFile(devicesName, JSON.stringify(devices, null, 4), function writeJSON(err) {
                     if (err) return console.log(err);
                 });
                 res.json({ "message": "success" })
@@ -193,7 +193,7 @@ function equipements(app) {
         }
         const newScenario = scenarios;
         newScenario.push(req.body);
-        fs.writeFile(scenariosName, JSON.stringify(newScenario), function writeJSON(err) {
+        fs.writeFile(scenariosName, JSON.stringify(newScenario, null, 4), function writeJSON(err) {
             if (err) return console.log(err);
         });
         res.json({ "message": "success" })
@@ -215,7 +215,7 @@ function equipements(app) {
             return;
         }
         scenarios.splice(id, 1);
-        fs.writeFile(devicesName, JSON.stringify(devices), function writeJSON(err) {
+        fs.writeFile(devicesName, JSON.stringify(devices, null, 4), function writeJSON(err) {
             if (err) return console.log(err);
         });
         res.json({ "message": "success" })

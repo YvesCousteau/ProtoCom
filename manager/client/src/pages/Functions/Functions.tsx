@@ -189,7 +189,7 @@ function RunModal(props: any) {
         if (props.modal) {
             Api.getFunction(setFct, props.item.function, props.item.setState);
         }
-    }, [props]);
+    }, [props.modal]);
     useEffect(() => {
         if(ran) {
             if (fct) {
