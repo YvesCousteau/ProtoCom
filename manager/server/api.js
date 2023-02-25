@@ -23,6 +23,7 @@ function init(app) {
 }
 
 function equipements(app) {
+    // Ping Device
     app.get("/api/ping/:ip", (req, res) => {
         try {
             exec("ping -c 1 "+system.ip + req.params.ip + " | grep 100% | wc -l", function (error, stdout, stderr) {
