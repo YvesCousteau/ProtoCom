@@ -7,7 +7,8 @@ port = 9633
 bufferSize = 65536
 ip = sys.argv[1]
 q = queue.Queue(maxsize=2000)
-chunk = 10*1024
+# chunk = 10*1024
+chunk = 1024
 p = pyaudio.PyAudio()
 
 def getAudioData():
@@ -30,8 +31,8 @@ except socket.error as err:
 
 stream = p.open(
     format=p.get_format_from_width(2),
-    channels=2,
-    rate=3000,
+    channels=1,
+    rate=22050,
     output=True,
     frames_per_buffer=chunk
 )
@@ -42,7 +43,7 @@ socket_address = (ip,port)
 
 t1 = threading.Thread(target=getAudioData, args=())
 t1.start()
-time.sleep(5)
+time.sleep(1)
 
 print('Now Playing...')
 while True:
