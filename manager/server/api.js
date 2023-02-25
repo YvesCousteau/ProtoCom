@@ -9,6 +9,8 @@ const functions = require(functionsName);
 const scenariosName = '../../config/scenarios.json';
 const scenarios = require(scenariosName);
 
+const { exec } = require('child_process');
+
 function init(app) {
     app.get('/api', (req, res) => {
         if (system == null || devices == null || functions == null) {
@@ -17,9 +19,29 @@ function init(app) {
         }
         res.json({ "message": "Server is UP !" });
     });
+    
 }
 
 function equipements(app) {
+    app.get("/api/ping/:ip", (req, res) => {
+        try {
+            exec("ping -c 1 "+system.ip + req.params.ip + " | grep 100% | wc -l", function (error, stdout, stderr) {
+                if (stdout > 0) {
+                    stdout = false;
+                } else {
+                    stdout = true;
+                }
+                res.json({ 
+                    "message": system.ip + req.params.ip + " ...",
+                    "data": stdout
+                })
+            });
+        } catch {
+            console.log("error");
+            res.status(400).json({ "error": "No device up" });
+            return;
+        }
+    });
     // GetDevices
     app.get("/api/devices", (req, res, next) => {
         if (devices == {}) {

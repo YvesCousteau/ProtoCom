@@ -3,7 +3,6 @@
 /****************/
 const express = require("express");
 const bodyParser = require("body-parser");
-const { exec } = require('child_process');
 const app = express();
 const PORT = process.env.PORT || 3001;
 // API File
@@ -22,6 +21,8 @@ api.init(app);
 api.equipements(app);
 /***************/
 api.services(app);
+/***************/
+
 /***************/
 app.get('*', (req, res) => {
     res.status(404).json({ "error": "Path does not exist" })
