@@ -3,26 +3,24 @@
         "name":"power",
         "com":"bash",
         "api": "api/services/power/",
-        "client":"client_master.py",
-        "server":"server_slave.py",
         "removable":false,
         "options":["reboot","powerOff"]
     },
+
+
     {
         "name":"sound",
         "com":"alsa",
         "api": "api/services/sound/",
-        "client":"client_master.py",
-        "server":"server_slave.py",
         "removable":true,
         "options":["play","stop"]
     },
+
+    
     {
         "name":"ivi",
         "com":"unity",
         "api": "api/services/ivi/",
-        "client":"client_master.py",
-        "server":"server_slave.py",
         "removable":true,
         "options":[
             "powerView",
@@ -45,8 +43,6 @@
         "name":"cluster",
         "com":"unity",
         "api": "api/services/cluster/",
-        "client":"client_master.py",
-        "server":"server_slave.py",
         "removable":true,
         "options":[
             "swapCarModeLeft",
@@ -71,8 +67,6 @@
         "name":"max7219",
         "com":"uart",
         "api": "api/services/max7219/",
-        "client":"client_master.py",
-        "server":"server_slave.py",
         "removable":true,
         "options":["test","ok"]
     }
