@@ -27,8 +27,7 @@ export default function Device() {
     useEffect(() => {
         if (diagram) {
             Api.getDiagram(setState);
-            setTimeout(() => setDiagramLoaded(true), 1500);
-            
+            setTimeout(() => setDiagramLoaded(true), 2000);
             setDiagram(false);
         }
     }, [diagram]);

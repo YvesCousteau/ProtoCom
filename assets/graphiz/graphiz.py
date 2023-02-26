@@ -20,7 +20,7 @@ i = 0
 for device in devices:
   i += 1
   with g.subgraph(name='cluster'+device["name"]) as a:
-      a.attr(color='blue', label='cluster_'+device["name"])
+      a.attr(color='blue', label='cluster_'+device["name"]+'_'+device["voltage"]+'V'+'_'+device["amperage"]+'A')
       a.node(device["name"], style='filled', fillcolor='cyan')
       for item in device["functions"]:
             for function in functions:

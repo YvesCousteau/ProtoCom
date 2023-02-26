@@ -2,16 +2,21 @@
     {
         "name": "Manager",
         "ip": "23",
+        "voltage": "5",
+        "amperage": "3",
         "functions": [
             "power",
             "sound",
-            "ivi"
+            "ivi",
+            "cluster"
         ],
         "description": "Manager/Back/Front"
     },
     {
         "name": "ThinkPad",
         "ip": "7",
+        "voltage": "20",
+        "amperage": "3",
         "functions": [
             "power",
             "sound",
@@ -23,9 +28,12 @@
     {
         "name": "Raspberry",
         "ip": "175",
+        "voltage": "5",
+        "amperage": "3",
         "functions": [
             "power",
-            "max7219"
+            "max7219",
+            "sound"
         ],
         "description": "Linux 32"
     }
