@@ -3,10 +3,14 @@ import Paper from "../../components/Paper";
 import Alert from "../../components/Alert";
 import * as Api from "./Api";
 import { Link } from "react-router-dom";
+import {saveAs} from "file-saver";
+import photo from '../../assets/diagram.gv.png';
+import { time } from "console";
 
 export default function Device() {
     const [devices, setDevices] = useState([]);
     const [diagram, setDiagram] = useState(false);
+    const [diagramLoaded, setDiagramLoaded] = useState(false);
     // Alert Message
     const [state, setState]: any = useState(null);
     const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
@@ -23,9 +27,18 @@ export default function Device() {
     useEffect(() => {
         if (diagram) {
             Api.getDiagram(setState);
+            setTimeout(() => setDiagramLoaded(true), 1500);
+            
             setDiagram(false);
         }
     }, [diagram]);
+
+    useEffect(() => {
+        if (diagramLoaded) {
+            saveAs(photo, "diagram.png");
+            setDiagramLoaded(false);
+        }
+    }, [diagramLoaded]);
     
     return(
         <div className="mx-8">

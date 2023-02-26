@@ -4,7 +4,8 @@
         "ip": "23",
         "functions": [
             "power",
-            "max7219"
+            "sound",
+            "ivi"
         ],
         "description": "Manager/Back/Front"
     },
@@ -24,9 +25,7 @@
         "ip": "175",
         "functions": [
             "power",
-            "max7219",
-            "sound",
-            "cluster"
+            "max7219"
         ],
         "description": "Linux 32"
     }
