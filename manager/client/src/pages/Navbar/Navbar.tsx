@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import * as Api from './Api';
 
 const Navbar = () => {
     /* Not rendered */
-    const [path, setPath] = useState(window.location.pathname);
+    const location = useLocation();
     const list = [
         {name:"Devices",path:"/"},
         {name:"Scenarios",path:"/scenarios"},
     ]
     const logo = require("../../assets/logo512.png")
-    useEffect(() => {
-        setPath(window.location.pathname)
-    }, []);
+    // useEffect(() => {
+    //     setPath(window.location.pathname)
+    // }, []);
     return(
     <div>
         <nav>
@@ -26,7 +26,7 @@ const Navbar = () => {
                         <div className="flex space-x-4 items-center">
                             {list.map((item: any,index: number) => (
                                 <li key={index}>
-                                    <Link to={item.path} className={`flex justify-center btn btn-primary w-44 ${item.path === path && "btn-secondary"}`}>{item.name}</Link>
+                                    <Link to={item.path} className={`flex justify-center btn btn-primary w-44 ${item.path === location.pathname && "btn-secondary"}`}>{item.name}</Link>
                                 </li>
                             ))}
                         </div>

@@ -1,36 +1,31 @@
 [
     {
-        "name": "zd",
-        "scenario": [
+        "name": "welcom",
+        "actions": [
             {
-                "device": "Manager",
-                "function": "power",
-                "arg": "reboot"
+                "device": "ThinkPad",
+                "function": "sound",
+                "arg": "play"
+            }
+        ]
+    },
+    {
+        "name": "goodbye",
+        "actions": [
+            {
+                "device": "ThinkPad",
+                "function": "sound",
+                "arg": "play"
             },
             {
                 "device": "Manager",
-                "function": "ivi",
-                "arg": "powerView"
-            }
-        ]
-    },
-    {
-        "name": "zadazdazd",
-        "scenario": [
+                "function": "power",
+                "arg": "powerOff"
+            },
             {
                 "device": "ThinkPad",
                 "function": "power",
-                "arg": "reboot"
-            }
-        ]
-    },
-    {
-        "name": "ddd",
-        "scenario": [
-            {
-                "device": "Raspberry",
-                "function": "cluster",
-                "arg": "swapCarModeLeft"
+                "arg": "powerOff"
             }
         ]
     }
