@@ -10,9 +10,6 @@ const Navbar = () => {
         {name:"Scenarios",path:"/scenarios"},
     ]
     const logo = require("../../assets/logo512.png")
-    // useEffect(() => {
-    //     setPath(window.location.pathname)
-    // }, []);
     return(
     <div>
         <nav>
