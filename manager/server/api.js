@@ -19,7 +19,6 @@ function init(app) {
         }
         res.json({ "message": "Server is UP !" });
     });
-    
 }
 function fcts(app) {
     // Ping Device
