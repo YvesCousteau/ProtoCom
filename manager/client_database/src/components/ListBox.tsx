@@ -31,7 +31,7 @@ export default function ListBox(props: any) {
                       active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                     }`
                   }
-                  value={item}
+                  value={item[props.extension]}
                 >
                   {({ selected }) => (
                     <>
@@ -40,7 +40,7 @@ export default function ListBox(props: any) {
                           selected ? 'font-bold' : 'font-semibold'
                         }`}
                       >
-                        {item}
+                        {item[props.extension]}
                       </span>
                       {selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

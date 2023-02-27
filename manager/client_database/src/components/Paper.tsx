@@ -1,6 +1,6 @@
 export default function Paper(props: any) {
     return (
-        <div className="rounded-[14px] shadow-md px-3 py-3 bg-gray-300 mx-auto">
+        <div className={`rounded-[14px] shadow-md px-3 py-3 bg-gray-300 mx-auto `+props.className}>
             <div className='flex justify-between w-full mb-1'>
                 <p className=" self-center text-classic pb-1">
                     {props.title}

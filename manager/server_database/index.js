@@ -21,6 +21,9 @@ const database = require("./database");
 database.setup(db);
 // API File
 const api = require("./api");
+const api_device = require("./api_device");
+const api_service = require("./api_service");
+const api_scenario = require("./api_scenario");
 /*****************/
 /***** Start *****/
 /*****************/
@@ -29,11 +32,13 @@ app.use(bodyParser.json());
 /***************/
 /***** API *****/
 /***************/
-api.init(app,db);
+app.get('/api', (req, res) => {
+    res.json({ "message": "Server is UP !" });
+});
 /***************/
-api.device(app,db);
-api.service(app,db);
-api.scenario(app,db);
+api_device.device(app,db);
+api_service.service(app,db);
+api_scenario.scenario(app,db);
 api.argument(app,db);
 api.action(app,db);
 /***************/

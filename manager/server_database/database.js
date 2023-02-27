@@ -18,9 +18,9 @@ function setup(db) {
                 else {
                     console.log("Table action just created")
                     db.run(
-                        `INSERT INTO action (id, id_device, id_service, id_argument, id_scenario) VALUES
-                            (2, 2, 2, 3, 1),
-                            (3, 2, 2, 4, 2)`,
+                        `INSERT INTO action (id_device, id_service, id_argument, id_scenario) VALUES
+                            (2, 2, 3, 1),
+                            (2, 2, 4, 2)`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO action just created")}
@@ -41,11 +41,11 @@ function setup(db) {
                 else {
                     console.log("Table argument just created")
                     db.run(
-                        `INSERT INTO argument (id, argument, id_service) VALUES
-                            (1, 'reboot', 1),
-                            (2, 'powerOff', 1),
-                            (3, 'play', 2),
-                            (4, 'stop', 2)`,
+                        `INSERT INTO argument (argument, id_service) VALUES
+                            ('reboot', 1),
+                            ('powerOff', 1),
+                            ('play', 2),
+                            ('stop', 2)`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO argument just created")}
@@ -57,17 +57,18 @@ function setup(db) {
         db.run(
             `CREATE TABLE device (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCAR(60) DEFAULT NULL,
+                device VARCAR(60) DEFAULT NULL,
                 ip VARCAR(16) DEFAULT NULL,
                 voltage INTEGER DEFAULT NULL,
-                amperage INTEGER DEFAULT NULL
+                amperage INTEGER DEFAULT NULL,
+                CONSTRAINT device_unique UNIQUE (device)
             )`,
             (err) => {
                 if (err) {console.log(err)} 
                 else {
                     console.log("Table device just created")
                     db.run(
-                        `INSERT INTO device (name, ip, voltage, amperage) VALUES
+                        `INSERT INTO device (device, ip, voltage, amperage) VALUES
                             ('Manager', '192.168.1.23', 5, 3),
                             ('ThinkPad', '192.168.1.7', 20, 7),
                             ('Raspberry_1', '192.168.1.175', 5, 3)`,
@@ -82,17 +83,18 @@ function setup(db) {
         db.run(
             `CREATE TABLE project (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCAR(60) DEFAULT NULL,
+                project VARCAR(60) DEFAULT NULL,
                 voltage INTEGER DEFAULT NULL,
-                amperage INTEGER DEFAULT NULL
+                amperage INTEGER DEFAULT NULL,
+                CONSTRAINT project_unique UNIQUE (project)
             )`,
             (err) => {
                 if (err) {console.log(err)} 
                 else {
                     console.log("Table project just created")
                     db.run(
-                        `INSERT INTO project (id, name, voltage, amperage) VALUES
-                            (1, 'ProtoCom', 0, 0)`,
+                        `INSERT INTO project (project, voltage, amperage) VALUES
+                            ('ProtoCom', 0, 0)`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO project just created")}
@@ -104,19 +106,19 @@ function setup(db) {
         db.run(
             `CREATE TABLE service (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCAR(60) DEFAULT NULL,
-                com VARCAR(60) DEFAULT NULL,
-                api VARCAR(60) DEFAULT NULL,
-                removable tinyINT(1) DEFAULT NULL
+                service VARCAR(60) DEFAULT NULL,
+                communication VARCAR(60) DEFAULT NULL,
+                removable tinyINT(1) DEFAULT NULL,
+                CONSTRAINT service_unique UNIQUE (service)
             )`,
             (err) => {
                 if (err) {console.log(err)} 
                 else {
                     console.log("Table service just created")
                     db.run(
-                        `INSERT INTO service (id, name, com, api, removable) VALUES
-                            (1, 'power', 'bash', '/api/services/power', 0),
-                            (2, 'sound', 'alsa', '/api/services/sound', 1)`,
+                        `INSERT INTO service (service, communication, removable) VALUES
+                            ('power', 'bash', 0),
+                            ('sound', 'alsa', 1)`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO service just created")}
@@ -128,16 +130,17 @@ function setup(db) {
         db.run(
             `CREATE TABLE scenario (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                name VARCAR(60) DEFAULT NULL
+                scenario VARCAR(60) DEFAULT NULL,
+                CONSTRAINT scenario_unique UNIQUE (scenario)
             )`,
             (err) => {
                 if (err) {console.log(err)} 
                 else {
                     console.log("Table scenario just created")
                     db.run(
-                        `INSERT INTO scenario (id, name) VALUES
-                            (1, 'welcome'),
-                            (2, 'goodbye')`,
+                        `INSERT INTO scenario (scenario) VALUES
+                            ('welcome'),
+                            ('goodbye')`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO scenario just created")}

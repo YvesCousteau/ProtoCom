@@ -9,10 +9,9 @@ import Paper from "../../components/Paper";
 export default function Functions() {
     let { name } = useParams();
     const [modalAdd, setModalAdd] = useState(false);
-    const [functions, setFunctions]: any = useState(null);
-    const [functionsName, setFunctionsName]: any = useState(null);
+
+    const [services, setServices]: any = useState(null);
     const [device, setDevice]: any = useState(null);
-    const [deviceFunctions, setDeviceFunctions]: any = useState(null);
     // Alert Message
     const [state, setState]: any = useState(null);
     const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
@@ -25,7 +24,7 @@ export default function Functions() {
     }, [render, name]);
     // Get all functions Once
     useEffect(() => {
-        Api.getFunctions(setFunctions, setState);
+        Api.getServices(setServices, setState);
     }, []);
     // Render alert
     useEffect(() => {
@@ -34,28 +33,29 @@ export default function Functions() {
             setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
         }
     }, [state]);
-    // Get Functions Name
-    useEffect(() => {
-        if(functions) {
-            const listFunctions: any = [];
-            for(const item of functions) {
-                listFunctions.push(item.name);
-            }
-            setFunctionsName(listFunctions);
-        }
-    }, [functions]);
-    // Get Device functions
-    useEffect(() => {
-        if(device && functionsName) {
-            const listDeviceFunctions = [];
-            for(const item of device.functions) {  
-                if (functionsName.includes(item)) {
-                    listDeviceFunctions.push(item);
-                }
-            }
-            setDeviceFunctions(listDeviceFunctions);
-        }
-    }, [functionsName,device]);
+
+    // // Get Functions Name
+    // useEffect(() => {
+    //     if(functions) {
+    //         const listFunctions: any = [];
+    //         for(const item of functions) {
+    //             listFunctions.push(item.name);
+    //         }
+    //         setFunctionsName(listFunctions);
+    //     }
+    // }, [functions]);
+    // // Get Device functions
+    // useEffect(() => {
+    //     if(device && functionsName) {
+    //         const listDeviceFunctions = [];
+    //         for(const item of device.functions) {  
+    //             if (functionsName.includes(item)) {
+    //                 listDeviceFunctions.push(item);
+    //             }
+    //         }
+    //         setDeviceFunctions(listDeviceFunctions);
+    //     }
+    // }, [functionsName,device]);
 
     return(
         <div className="mx-8">
@@ -64,13 +64,12 @@ export default function Functions() {
                     {name && <div className="font-bold text-2xl color-classic ">Functions of {name}</div>}
                     <button className=' btn btn-classic h-8 w-24 ' onClick={() => setModalAdd(true)}>+ ADD</button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4  gap-4 justify-items-center mx-6">
-                    {deviceFunctions && deviceFunctions.length > 0 && deviceFunctions.map((fct: any,index: number) => 
+                <div className="grid grid-cols-3  gap-4 justify-items-center mx-6">
+                    {device && device.length > 0 && device.map((service: any,index: number) => 
                         <Item 
                         key={index}
+                        service={service}
 
-                        function={fct}
-                        device={device}
                         setState={setState}
                         index={index}
                         setRender={setRender}
@@ -78,14 +77,15 @@ export default function Functions() {
                     )}
                 </div>
             </div>
-            {functionsName && <>
+            {services && <>
                 <AddModal 
                 modal={modalAdd}
                 setModal={setModalAdd} 
-                functions={functionsName}
-                device={device}
-                setState={setState}
 
+                services={services}
+                device={device}
+
+                setState={setState}
                 setRender={setRender}
                 render={render} />
             </>}
@@ -99,14 +99,15 @@ function Item(props: any) {
     const [modalRun, setModalRun] = useState(false);
     const [modalDelete, setModalDelete] = useState(false);
     return(
-        <div className=''>
+        <div className='w-full'>
             {props.function !== null && (
                 <div className=''>
-                    <Paper title={"Function : "+props.function} deleted={setModalDelete} removable={true}>
-                        <p className="text-classic pb-1">{"Device : " + props.device.name}</p>
+                    <Paper title={"Function : "+props.service.service} deleted={setModalDelete} removable={true} className='w-full'>
+                        <p className="text-classic pb-1">{"Device : " + props.service.device}</p>
+                        <p className="text-classic pb-1">{"Communication : " + props.service.communication}</p>
                         <button onClick={() => setModalRun(true)} className="w-full btn btn-classic ">Run</button>
                     </Paper>
-                    <RunModal modal={modalRun} setModal={setModalRun} item={props}/>
+                    {/* <RunModal modal={modalRun} setModal={setModalRun} item={props}/> */}
                     <DeleteModal modal={modalDelete} setModal={setModalDelete} item={props}/>
                 </div>
             )}
@@ -120,21 +121,26 @@ function AddModal(props: any) {
     const [created, setCreated] = useState(false);
     useEffect(() => {
         if(created) {
-            let body = {name:inputName};
-            Api.addDeviceFunction(body,name,props.setState);
+            let id_service;
+            for (const item of props.services) {
+                if (item.service === inputName) {
+                    id_service = item.id;
+                }
+            }
+            let body = {id_service:id_service,id_device:props.device[0].id};
+            
+            Api.addDeviceService(body,props.setState);
             props.setRender(!props.render);
             props.setModal(false);
             setCreated(false);
         }
     }, [created, inputName, name, props]);
-    
     // Function selection
     useEffect(() => {
-        if (!inputName && props.functions) {
-            setInputName(props.functions[0]);
+        if (!inputName && props.services) {
+            setInputName(props.services[0].service);
         }
-    }, [inputName,props.functions]);
-
+    }, [inputName,props.services]);
     return (
         <Modal
             open={props.modal}
@@ -145,7 +151,7 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.functions.length > 0  && <ListBox data={props.functions} setSelected={setInputName} selected={inputName}/>}
+                        {props.services.length > 0  && <ListBox data={props.services} extension='service' setSelected={setInputName} selected={inputName} />}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
@@ -162,8 +168,8 @@ function DeleteModal(props: any) {
     const [deleted, setDeleted] = useState(false);
     useEffect(() => {
         if (deleted) {
-            let body = { id: props.item.index };
-            Api.deleteDeviceFunction(body,name,props.item.setState);
+            let body = {id_service:props.item.service.id_service,id_device:props.item.service.id};
+            Api.deleteDeviceService(body,props.item.setState);
             props.item.setRender(!props.item.render);
             props.setModal(false)
             setDeleted(false);
@@ -181,36 +187,36 @@ function DeleteModal(props: any) {
         </Modal>
     );
 }
-function RunModal(props: any) {
-    const [fct, setFct]: any = useState(null);
-    const [ran, setRan] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    useEffect(() => {
-        if (props.modal) {
-            Api.getFunction(setFct, props.item.function, props.item.setState);
-        }
-    }, [props.modal]);
-    useEffect(() => {
-        if(ran) {
-            if (fct) {
-                Api.service(fct.api, props.item.device.ip, inputValue, props.item.setState);
-                props.setModal(false);
-                setRan(false);
-            }
-        }
-    }, [ran, fct, inputValue, props]);
-    return (
-        <>
-            {fct && <Modal
-                open={props.modal}
-                setOpen={props.setModal}
-                title="Update"
-                subtitle={"Run the service : " + fct.name}>
-                <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                    <ListBox data={fct.options} setSelected={setInputValue} selected={fct.options[0]}/>
-                    <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+props.item.function.cmd+" "+inputValue}</button>
-                </div>
-            </Modal>}
-        </>
-    );
-}
+// function RunModal(props: any) {
+//     const [fct, setFct]: any = useState(null);
+//     const [ran, setRan] = useState(false);
+//     const [inputValue, setInputValue] = useState('');
+//     useEffect(() => {
+//         if (props.modal) {
+//             Api.getFunction(setFct, props.item.function, props.item.setState);
+//         }
+//     }, [props.modal]);
+//     useEffect(() => {
+//         if(ran) {
+//             if (fct) {
+//                 Api.service(fct.api, props.item.device.ip, inputValue, props.item.setState);
+//                 props.setModal(false);
+//                 setRan(false);
+//             }
+//         }
+//     }, [ran, fct, inputValue, props]);
+//     return (
+//         <>
+//             {fct && <Modal
+//                 open={props.modal}
+//                 setOpen={props.setModal}
+//                 title="Update"
+//                 subtitle={"Run the service : " + fct.name}>
+//                 <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+//                     <ListBox data={fct.options} setSelected={setInputValue} selected={fct.options[0]}/>
+//                     <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+props.item.function.cmd+" "+inputValue}</button>
+//                 </div>
+//             </Modal>}
+//         </>
+//     );
+// }

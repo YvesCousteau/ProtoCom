@@ -46,7 +46,7 @@ export default function Device() {
                     <div className="text-classic ">Devices</div>
                     <button className=' btn btn-classic h-8 ' onClick={() => setDiagram(true)}>Download Project Diagram</button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4  gap-4 justify-items-center mx-6">
+                <div className="grid grid-cols-3 gap-4 justify-items-center mx-6">
                     {devices && devices.map((device: any, index: number) => 
                         <Item key={index} device={device} setState={setState}/>
                     )}
@@ -66,15 +66,12 @@ function Item(props: any) {
         }
     },[ping,props.device.ip]);
     return(
-        <div className=''>
+        <div className='w-full'>
             {props.device !== null && (
                 <div className=''>
-                    <Paper title={"Device : "+props.device.name} removable={false}>
+                    <Paper title={"Device : "+props.device.device} removable={false} className='w-full'>
                         <p className="text-classic pb-1">{"IP : "+props.device.ip}</p>
-                        {/* <p className="text-classic pb-2">
-                            {props.device && "Functions Numbers : "+props.device.functions.length}
-                        </p> */}
-                        <Link to={'device/'+props.device.name} className="flex justify-center btn btn-classic ">Functions</Link>
+                        <Link to={'device/'+props.device.device} className="flex justify-center btn btn-classic ">Functions</Link>
                         <button className={`btn ${state === 'unknow' && 'btn-classic'} ${state === false && 'btn-close'} ${state === true && 'btn-open'} mt-4 w-full`} onClick={() => setPing(true)}>{"Ping : "+state}</button>
                     </Paper>
                 </div>

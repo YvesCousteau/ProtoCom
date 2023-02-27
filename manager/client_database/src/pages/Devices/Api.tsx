@@ -1,6 +1,6 @@
 export function getDevices(setValue: any, setState: any) {
     try {
-        let result = fetch("/api/device/all", {
+        let result = fetch("/api/device/all/basic", {
             method: 'GET'
         })
         result.then((sucess) => {

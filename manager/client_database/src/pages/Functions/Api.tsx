@@ -1,6 +1,6 @@
 export function getDevice(setValue: any, name: any, setState: any) {
     try {
-        let result = fetch("/api/device/"+name, {
+        let result = fetch("/api/device/single/full/"+name, {
             method: 'GET'
         })
         result.then((sucess) => { 
@@ -17,9 +17,9 @@ export function getDevice(setValue: any, name: any, setState: any) {
     }
 }
 
-export function getFunctions(setValue: any, setState: any) {
+export function getServices(setValue: any, setState: any) {
     try {
-        let result = fetch("/api/functions/", {
+        let result = fetch("/api/service/all/basic", {
             method: 'GET'
         })
         result.then((sucess) => { 
@@ -36,28 +36,28 @@ export function getFunctions(setValue: any, setState: any) {
     }
 }
 
-export function getFunction(setValue: any, name: string, setState: any) {
-    try {
-        let result = fetch("/api/function/"+name, {
-            method: 'GET'
-        })
-        result.then((sucess) => { 
-            console.log(sucess);
-            if (sucess.ok) { 
-                setState({ state: 'Success', url: sucess.url }) 
-            } else { 
-                setState({ state: 'Error', url: sucess.url }) 
-            }
-        })
-        result.then((res) => res.json()).then((data) => setValue(data.data));
-    } catch (error) {
-        console.log(error);
-    }
-}
+// export function getFunction(setValue: any, name: string, setState: any) {
+//     try {
+//         let result = fetch("/api/function/"+name, {
+//             method: 'GET'
+//         })
+//         result.then((sucess) => { 
+//             console.log(sucess);
+//             if (sucess.ok) { 
+//                 setState({ state: 'Success', url: sucess.url }) 
+//             } else { 
+//                 setState({ state: 'Error', url: sucess.url }) 
+//             }
+//         })
+//         result.then((res) => res.json()).then((data) => setValue(data.data));
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
-export function addDeviceFunction(body: any, name: any, setState: any) {
+export function addDeviceService(body: any, setState: any) {
     try {
-        let result = fetch("/api/device/"+name, {
+        let result = fetch("/api/device/add/service/", {
             method: 'POST',
             headers: {
                 Accept: 'application.json',
@@ -77,9 +77,9 @@ export function addDeviceFunction(body: any, name: any, setState: any) {
         console.log(error);
     }
 }
-export function deleteDeviceFunction(body: any, name: any, setState: any) {
+export function deleteDeviceService(body: any, setState: any) {
     try {
-        let result = fetch("/api/device/"+name, {
+        let result = fetch("/api/device/delete/service/", {
             method: 'DELETE',
             headers: {
                 Accept: 'application.json',
