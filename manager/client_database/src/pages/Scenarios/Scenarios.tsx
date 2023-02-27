@@ -21,9 +21,7 @@ export default function Scenarios() {
     useEffect(() => {
         Api.getScenarios(setScenarios, setState);
     }, [render]);
-    useEffect(() => {
-        Api.getDevices(setDevices, setState);
-    }, []);
+
     useEffect(() => {
         if (state) {
             setAlert({ visible: true, type: state.state, status: null, url: state.url });
@@ -66,14 +64,14 @@ export default function Scenarios() {
                     )}
                 </div>
             </div>
-            {devicesName && devicesName.length > 0 && <AddModal 
+            <AddModal 
             modal={modalAdd}
             setModal={setModalAdd} 
             devices={devicesName}
             setState={setState}
             setRender={setRender} 
             render={render}
-            />}
+            />
             <Alert alert={alert}/>
         </div>
     );
@@ -98,14 +96,14 @@ function Item(props: any) {
     }, [ran]);
     return(
         <div className='w-full'>
-            <Paper title={"Scenario : " + props.scenario.name} deleted={setModalDelete}  removable={true}>
-                {props.scenario.scenario.map((item: any, index: number) => 
+            <Paper title={"Scenario : " + props.scenario.scenario} deleted={setModalDelete}  removable={true}>
+                {/* {props.scenario.scenario.map((item: any, index: number) => 
                     <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
                         <p className="text-classic pb-1">{"Device: "+item.device}</p>
                         <p className="text-classic pb-1">{"Function: "+item.function}</p>
                         <p className="text-classic pb-1">{"Argument: " + item.arg}</p>
                     </div> 
-                )}
+                )} */}
                 <div className="flex justify-center">
                     <button onClick={() => setRan(true)} className="mt-4 btn btn-classic w-80">
                         Run
@@ -120,14 +118,63 @@ function Item(props: any) {
 function AddModal(props: any) {
     const [created, setCreated] = useState(false);
     const [added, setAdded] = useState(false);
-    const [functionsName, setFunctionsName]: any = useState(null);
-    const [optionsName, setOptionsName]: any = useState(null);
+    
     const [inputDevice, setInputDevice] = useState(null);
-    const [inputFct, setInputFct] = useState(null);
-    const [inputOption, setInputOption] = useState(null);
+    const [inputService, setInputService] = useState(null);
+    const [inputArgument, setInputArgument] = useState(null);
     const [inputName, setInputName] = useState(null);
 
     const [scenario, setScenario]: any = useState([]);
+
+    const [devices, setDevices]: any = useState(null);
+    const [deviceServices, setDeviceServices]: any = useState(null);
+    const [serviceArguments, setServiceArguments]: any = useState(null);
+    useEffect(() => {
+        if (props.modal) {
+            Api.getDevices(setDevices, props.setState);
+        }
+    }, [props.modal]);
+    // Device selection
+    useEffect(() => {
+        if (!inputDevice && devices && devices.length > 0 ) {
+            setInputDevice(devices[0].device);
+        }
+    }, [inputDevice,devices]);
+
+    useEffect(() => {
+        if(!inputDevice && devices && devices.length > 0) {
+            Api.getDeviceServices(setDeviceServices, devices[0].device,props.setState);
+        } 
+        else if(props.modal) {
+            console.log("la on change les options");
+            Api.getDeviceServices(setDeviceServices, inputDevice,props.setState);
+        }
+    }, [inputDevice,props.setState,devices]);
+
+    // Function selection
+    useEffect(() => {
+        console.log(deviceServices);
+        
+        if (!inputService && deviceServices && deviceServices.length > 0) {
+            setInputService(deviceServices[0].service);
+        }
+    }, [inputService,deviceServices]);
+    
+    useEffect(() => {
+        if(!inputService && deviceServices && deviceServices.length > 0) {
+            Api.getServiceArguments(setServiceArguments, deviceServices[0].device,props.setState);
+        } 
+        else if(props.modal) {
+            Api.getServiceArguments(setServiceArguments, inputService,props.setState);
+        }
+    }, [inputService,props.setState,deviceServices]);
+
+    // Option selection
+    useEffect(() => {
+        if (inputArgument && serviceArguments && serviceArguments.length > 0) {
+            setInputArgument(serviceArguments[0].argument);
+        } 
+    }, [serviceArguments]);
 
     useEffect(() => {
         if(created && scenario) {
@@ -138,55 +185,14 @@ function AddModal(props: any) {
             props.setRender(!props.render);
             setCreated(false)
         }
-    }, [created, inputDevice, inputFct, inputOption, inputName, scenario, props]);
-
-    // Device selection
-    useEffect(() => {
-        if (!inputDevice && props.devices) {
-            setInputDevice(props.devices[0]);
-        }
-    }, [inputDevice,props.devices]);
-
-    // -----------------------------------------------------------------------
-    useEffect(() => {
-        if(!inputDevice) {
-            Api.getDeviceFunctions(setFunctionsName, props.devices[0],props.setState);
-        } 
-        else {
-            console.log("la on change les options");
-            Api.getDeviceFunctions(setFunctionsName, inputDevice,props.setState);
-        }
-    }, [inputDevice,props.setState,props.devices]);
-    // Function selection
-    useEffect(() => {
-        if (functionsName) {
-            setInputFct(functionsName[0]);
-        }
-    }, [functionsName]);
+    }, [created, inputDevice, inputService, inputArgument, inputName, scenario, props]);
 
     useEffect(() => {
-        if(!inputFct && functionsName) {
-            Api.getFunctionOptions(setOptionsName, functionsName[0],props.setState);
-        } 
-        else {
-            console.log("la on change les options");
-            Api.getFunctionOptions(setOptionsName, inputFct,props.setState);
-        }
-    }, [inputFct,props.setState,functionsName]);
-
-    // Option selection
-    useEffect(() => {
-        if (optionsName) {
-            setInputOption(optionsName[0]);
-        } 
-    }, [optionsName]);
-
-    useEffect(() => {
-        if (added && inputDevice && inputFct && inputOption) {
-            setScenario([...scenario,{ device: inputDevice, function: inputFct, arg: inputOption }])
+        if (added && inputDevice && inputService && inputArgument) {
+            setScenario([...scenario,{ device: inputDevice, function: inputService, arg: inputArgument }])
             setAdded(false);
         }
-    }, [added, inputDevice, inputFct, inputOption, scenario]);
+    }, [added, inputDevice, inputService, inputArgument, scenario]);
 
     return (
         <Modal
@@ -197,21 +203,21 @@ function AddModal(props: any) {
             <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
                 <Input label="Name :" placeholder="Text..." onChange={setInputName} />
                 <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Name :&nbsp;</p>
+                    <p className="self-center text-classic">Device :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.devices.length > 0  && <ListBox data={props.devices} setSelected={setInputDevice} selected={inputDevice}/>}
+                        {devices && devices.length > 0  && <ListBox data={devices} extension='device' setSelected={setInputDevice} selected={inputDevice}/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Name :&nbsp;</p>
+                    <p className="self-center text-classic">Service :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {functionsName  && <ListBox data={functionsName} setSelected={setInputFct} selected={inputFct}/>}
+                        {deviceServices && deviceServices.length > 0 && <ListBox data={deviceServices} extension='service' setSelected={setInputService} selected={inputService}/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Name :&nbsp;</p>
+                    <p className="self-center text-classic">Argument :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {optionsName && <ListBox data={optionsName} setSelected={setInputOption} selected={inputOption}/>}
+                        {serviceArguments && serviceArguments.length > 0 && <ListBox data={serviceArguments} extension='argument' setSelected={setInputArgument} selected={inputArgument}/>}
                     </div>
                 </div>
                 <div className="ml-40 grid grid-cols-2 gap-4">
