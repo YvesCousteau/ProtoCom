@@ -2,6 +2,7 @@ function scenario(app,db) {
     app.get("/api/scenario/all/full", (req, res, next) => {
         db.all(
             `SELECT 
+                scenario.id,
                 scenario.scenario,
                 device.device,
                 service.service,
@@ -26,6 +27,7 @@ function scenario(app,db) {
     app.get("/api/scenario/all/basic", (req, res, next) => {
         db.all(
             `SELECT
+                scenario.id,
                 scenario.scenario
             FROM scenario`, 
             [], function (err, rows) {
@@ -43,10 +45,12 @@ function scenario(app,db) {
     app.get("/api/scenario/single/full/:name", (req, res, next) => {
         db.all(
             `SELECT 
+                scenario.id,
                 scenario.scenario,
                 device.device,
                 service.service,
-                argument.argument
+                argument.argument,
+                action.id AS id_action
             FROM scenario
             INNER JOIN action ON action.id_scenario = scenario.id
             INNER JOIN device ON device.id = action.id_device
@@ -68,6 +72,7 @@ function scenario(app,db) {
     app.get("/api/scenario/single/basic/:name", (req, res, next) => {
         db.all(
             `SELECT
+                scenario.id,
                 scenario.scenario
             FROM scenario WHERE scenario.scenario LIKE ?`, 
             [req.params.name], function (err, row) {
@@ -81,35 +86,51 @@ function scenario(app,db) {
                 })
             });
     });
-    app.post("/api/scenario/add/action", (req, res, next) => {
-        db.run(
-            `INSERT INTO 
-                action (id_device, id_service, id_argument, id_scenario) 
-            VALUES 
-                (?,?,?,?)`, 
-            [req.body.id_device,req.body.id_service,req.body.id_argument,req.body.id_scenario], function (err, result) {
-            if (err) {
-                res.status(400).json({ "error": err.message })
-                return;
-            }
-            res.json({
-                "message": "success"
-            })
-        });
-    });
-    app.delete("/api/scenario/delete", (req, res, next) => {
-        db.run(
-            'DELETE FROM scenario WHERE scenario.scenario LIKE ?',
-            [req.params.name], function (err, result) {
-                if (err) {
-                    res.status(400).json({ "error": res.message })
-                    return;
-                }
-                res.json({ 
-                    "message": "success"
-                })
-        });
-    });
+    // app.post("/api/scenario/add/action", (req, res, next) => {
+    //     db.run(
+    //         `INSERT INTO 
+    //             action (id_device, id_service, id_argument, id_scenario) 
+    //         VALUES 
+    //             (?,?,?,?)`, 
+    //         [req.body.id_device,req.body.id_service,req.body.id_argument,req.body.id_scenario], function (err, result) {
+    //         if (err) {
+    //             res.status(400).json({ "error": err.message })
+    //             return;
+    //         }
+    //         res.json({
+    //             "message": "success"
+    //         })
+    //     });
+    // });
+    // app.post("/api/scenario/add/:name", (req, res, next) => {
+    //     db.run(
+    //         `INSERT INTO 
+    //             scenario (scenario) 
+    //         VALUES 
+    //             (?)`, 
+    //         [req.params.name], function (err, result) {
+    //         if (err) {
+    //             res.status(400).json({ "error": err.message })
+    //             return;
+    //         }
+    //         res.json({
+    //             "message": "success"
+    //         })
+    //     });
+    // });
+    // app.delete("/api/scenario/delete", (req, res, next) => {
+    //     db.run(
+    //         'DELETE FROM scenario WHERE scenario.scenario LIKE ?',
+    //         [req.params.name], function (err, result) {
+    //             if (err) {
+    //                 res.status(400).json({ "error": res.message })
+    //                 return;
+    //             }
+    //             res.json({ 
+    //                 "message": "success"
+    //             })
+    //     });
+    // });
     // ================================================================
     // app.post("/api/device/", (req, res, next) => {
     //     db.run(
