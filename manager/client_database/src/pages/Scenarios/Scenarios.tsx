@@ -124,6 +124,8 @@ function AddModal(props: any) {
     const [inputArgument, setInputArgument] = useState(null);
     const [inputName, setInputName] = useState(null);
 
+    
+
     const [scenario, setScenario]: any = useState([]);
 
     const [devices, setDevices]: any = useState(null);
@@ -151,14 +153,14 @@ function AddModal(props: any) {
         }
     }, [inputDevice,props.setState,devices]);
 
-    // Function selection
+    // Service selection
     useEffect(() => {
         console.log(deviceServices);
         
-        if (!inputService && deviceServices && deviceServices.length > 0) {
+        if (deviceServices && deviceServices.length > 0) {
             setInputService(deviceServices[0].service);
         }
-    }, [inputService,deviceServices]);
+    }, [deviceServices]);
     
     useEffect(() => {
         if(!inputService && deviceServices && deviceServices.length > 0) {
@@ -169,11 +171,11 @@ function AddModal(props: any) {
         }
     }, [inputService,props.setState,deviceServices]);
 
-    // Option selection
+    // Argument selection
     useEffect(() => {
-        if (inputArgument && serviceArguments && serviceArguments.length > 0) {
+        if (serviceArguments && serviceArguments.length > 0) {
             setInputArgument(serviceArguments[0].argument);
-        } 
+        }
     }, [serviceArguments]);
 
     useEffect(() => {
@@ -189,7 +191,31 @@ function AddModal(props: any) {
 
     useEffect(() => {
         if (added && inputDevice && inputService && inputArgument) {
-            setScenario([...scenario,{ device: inputDevice, function: inputService, arg: inputArgument }])
+            let id_device;
+            for (const item of devices) {
+                if (item.device === inputDevice) {
+                    id_device = item.id;
+                }
+            }
+            let id_service;
+            for (const item of devices) {
+                if (item.service === inputService) {
+                    id_service = item.id;
+                }
+            }
+            let id_argument;
+            for (const item of devices) {
+                if (item.argument === inputArgument) {
+                    id_argument = item.id;
+                }
+            }
+            setScenario([...scenario,{ 
+                device: inputDevice,
+                id_device: id_device, 
+                service: inputService, 
+                id_service: id_service, 
+                arg: inputArgument, 
+                id_argument: id_argument }])
             setAdded(false);
         }
     }, [added, inputDevice, inputService, inputArgument, scenario]);
@@ -226,9 +252,9 @@ function AddModal(props: any) {
                 </div>
                 {scenario && scenario.length > 0 && scenario.map((item: any, index: number) =>
                     <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
-                        <p className="text-classic pb-1">{"Device: " + item.device}</p>
-                        <p className="text-classic pb-1">{"Function: " + item.function}</p>
-                        <p className="text-classic pb-1">{"Argument: " + item.arg}</p>
+                        <p className="text-classic pb-1">{"Device: " + item.device + '| ip: '+item.id_device}</p>
+                        <p className="text-classic pb-1">{"Function: " + item.service + '| ip: '+item.id_service}</p>
+                        <p className="text-classic pb-1">{"Argument: " + item.arg + '| ip: '+item.id_arg}</p>
                     </div>
                 )}
             </div>

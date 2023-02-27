@@ -81,6 +81,35 @@ function scenario(app,db) {
                 })
             });
     });
+    app.post("/api/scenario/add/action", (req, res, next) => {
+        db.run(
+            `INSERT INTO 
+                action (id_device, id_service, id_argument, id_scenario) 
+            VALUES 
+                (?,?,?,?)`, 
+            [req.body.id_device,req.body.id_service,req.body.id_argument,req.body.id_scenario], function (err, result) {
+            if (err) {
+                res.status(400).json({ "error": err.message })
+                return;
+            }
+            res.json({
+                "message": "success"
+            })
+        });
+    });
+    app.delete("/api/scenario/delete", (req, res, next) => {
+        db.run(
+            'DELETE FROM scenario WHERE scenario.scenario LIKE ?',
+            [req.params.name], function (err, result) {
+                if (err) {
+                    res.status(400).json({ "error": res.message })
+                    return;
+                }
+                res.json({ 
+                    "message": "success"
+                })
+        });
+    });
     // ================================================================
     // app.post("/api/device/", (req, res, next) => {
     //     db.run(
