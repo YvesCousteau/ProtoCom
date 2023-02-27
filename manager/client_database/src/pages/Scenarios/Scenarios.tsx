@@ -135,6 +135,9 @@ function AddModal(props: any) {
         if (props.modal) {
             Api.getDevices(setDevices, props.setState);
         }
+        if (!props.modal) {
+            setScenario([]);
+        }
     }, [props.modal]);
     // Device selection
     useEffect(() => {
@@ -198,17 +201,17 @@ function AddModal(props: any) {
                 }
             }
             let id_service;
-            for (const item of devices) {
+            for (const item of deviceServices) {
                 if (item.service === inputService) {
-                    id_service = item.id;
+                    id_service = item.id_service;
                 }
             }
             let id_argument;
-            for (const item of devices) {
+            for (const item of serviceArguments) {
                 if (item.argument === inputArgument) {
-                    id_argument = item.id;
+                    id_argument = item.id_argument;
                 }
-            }
+            } 
             setScenario([...scenario,{ 
                 device: inputDevice,
                 id_device: id_device, 
@@ -254,7 +257,7 @@ function AddModal(props: any) {
                     <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
                         <p className="text-classic pb-1">{"Device: " + item.device + '| ip: '+item.id_device}</p>
                         <p className="text-classic pb-1">{"Function: " + item.service + '| ip: '+item.id_service}</p>
-                        <p className="text-classic pb-1">{"Argument: " + item.arg + '| ip: '+item.id_arg}</p>
+                        <p className="text-classic pb-1">{"Argument: " + item.arg + '| ip: '+item.id_argument}</p>
                     </div>
                 )}
             </div>
