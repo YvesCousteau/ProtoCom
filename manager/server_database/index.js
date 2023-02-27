@@ -4,9 +4,21 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const { exec } = require('child_process')
 const PORT = process.env.PORT || 3001;
 // =======================================
-const db = require("./database");
+var sqlite3 = require('sqlite3').verbose()
+let db = new sqlite3.Database('db.sqlite', (err) => {
+    if (err) {
+        // Cannot open database
+        console.error(err.message)
+        throw err
+    } else {
+        console.log('Connected to the SQLite database.')
+    }
+});
+const database = require("./database");
+database.setup(db);
 // API File
 const api = require("./api");
 /*****************/
@@ -39,6 +51,8 @@ app.post("/api/execution/:name/:option/:ip/", (req, res) => {
     }
 });
 /***************/
+fcts(app)
+/***************/
 app.get('*', (req, res) => {
     res.status(404).json({ "error": "Path does not exist" })
     res.json({
@@ -52,3 +66,41 @@ app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
 
+
+function fcts(app) {
+    // Ping Device
+    app.get("/api/ping/:ip", (req, res) => {
+        try {
+            console.log("ping -c 1 "+req.params.ip + " | grep 100% | wc -l");
+            exec("ping -c 1 "+req.params.ip + " | grep 100% | wc -l", function (error, stdout, stderr) {
+                if (stdout > 0) {
+                    stdout = false;
+                } else {
+                    stdout = true;
+                }
+                res.json({ 
+                    "message":"success",
+                    "data": stdout
+                })
+            });
+        } catch {
+            console.log("error");
+            res.status(400).json({ "error": "No device up" });
+            return;
+        }
+    });
+    // Diagram Devices
+    app.get("/api/diagram", (req, res) => {
+        try {
+            exec("python3 ../../assets/graphiz/graphiz.py", function (error, stdout, stderr) {
+                res.json({ 
+                    "message":"success"
+                })
+            });
+        } catch {
+            console.log("error");
+            res.status(400).json({ "error": "No device up" });
+            return;
+        }
+    });
+}

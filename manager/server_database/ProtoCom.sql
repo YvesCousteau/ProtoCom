@@ -35,6 +35,14 @@ CREATE TABLE `action` (
   `id_scenario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `action`
+--
+
+INSERT INTO `action` (`id`, `id_device`, `id_service`, `id_argument`, `id_scenario`) VALUES
+(2, 2, 2, 3, 1),
+(3, 2, 2, 4, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -46,6 +54,16 @@ CREATE TABLE `argument` (
   `argument` varchar(60) DEFAULT NULL,
   `id_service` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `argument`
+--
+
+INSERT INTO `argument` (`id`, `argument`, `id_service`) VALUES
+(1, 'reboot', 1),
+(2, 'powerOff', 1),
+(3, 'play', 2),
+(4, 'stop', 2);
 
 -- --------------------------------------------------------
 
@@ -61,6 +79,15 @@ CREATE TABLE `device` (
   `amperage` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `device`
+--
+
+INSERT INTO `device` (`id`, `name`, `ip`, `voltage`, `amperage`) VALUES
+(1, 'Manager', '192.168.1.23', 5, 3),
+(2, 'ThinkPad', '192.168.1.7', 20, 7),
+(3, 'Raspberry_1', '192.168.1.175', 5, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +101,13 @@ CREATE TABLE `project` (
   `amperage` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `project`
+--
+
+INSERT INTO `project` (`id`, `name`, `voltage`, `amperage`) VALUES
+(1, 'ProtoCom', 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +119,15 @@ CREATE TABLE `rel_device_service` (
   `id_device` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `rel_device_service`
+--
+
+INSERT INTO `rel_device_service` (`id_service`, `id_device`) VALUES
+(1, 1),
+(1, 3),
+(1, 2),
+(2, 2);
 
 -- --------------------------------------------------------
 
@@ -118,6 +161,14 @@ CREATE TABLE `service` (
   `api` varchar(60) DEFAULT NULL,
   `removable` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `service`
+--
+
+INSERT INTO `service` (`id`, `name`, `com`, `api`, `removable`) VALUES
+(1, 'power', 'bash', '/api/services/power', 0),
+(2, 'sound', 'alsa', '/api/services/sound', 1);
 
 --
 -- Index pour les tables déchargées

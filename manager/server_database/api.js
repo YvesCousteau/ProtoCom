@@ -1,26 +1,28 @@
 function device(app,db) {
     app.get("/api/device/all", (req, res, next) => {
-        db.run(
-            `SELECT
+        console.log('device/all');
+        db.all(
+            `SELECT 
                 device.id,
                 device.name,
                 device.ip,
                 device.voltage,
                 device.amperage
             FROM device`, 
-            [], function (err, row) {
+            [], function (err, rows) {
                 if (err) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
+                console.log(rows);
                 res.json({
                     "message": "success",
-                    "data": row,
+                    "data": rows,
                 })
             });
     });
     app.get("/api/device/basic/:name", (req, res, next) => {
-        db.run(
+        db.all(
             `SELECT
                 device.id,
                 device.name,
@@ -40,7 +42,7 @@ function device(app,db) {
             });
     });
     app.get("/api/device/full/:name", (req, res, next) => {
-        db.run(
+        db.all(
             `SELECT
                 device.id,
                 device.name,
@@ -121,27 +123,27 @@ function device(app,db) {
 
 function service(app,db) {
     app.get("/api/service/all", (req, res, next) => {
-        db.run(
-            `SELECT
+        db.all(
+            `SELECT 
                 service.id,
                 service.name,
                 service.com,
                 service.api,
-                service.removable
+                service.removable 
             FROM service`, 
-            [], function (err, row) {
+            [], function (err, rows) {
                 if (err) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
                 res.json({
                     "message": "success",
-                    "data": row,
+                    "data": rows,
                 })
             });
     });
     app.get("/api/service/basic/:name", (req, res, next) => {
-        db.run(
+        db.all(
             `SELECT
                 service.id,
                 service.name,
@@ -164,7 +166,7 @@ function service(app,db) {
 
     });
     app.get("/api/service/arguments/:id", (req, res, next) => {
-        db.run(
+        db.all(
             `SELECT
                 argument.id,
                 argument.argument
@@ -235,23 +237,23 @@ function service(app,db) {
 
 function scenario(app,db) {
     app.get("/api/scenario/all", (req, res, next) => {
-        db.run(
+        db.all(
             `SELECT
                 scenario.name
             FROM scenario`, 
-            [], function (err, row) {
+            [], function (err, rows) {
                 if (err) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
                 res.json({
                     "message": "success",
-                    "data": row,
+                    "data": rows,
                 })
             });
     });
     app.get("/api/scenario/basic/:name", (req, res, next) => {
-        db.run(
+        db.all(
             `SELECT
                 scenario.name
             FROM scenario WHERE scenario.name LIKE ?`, 

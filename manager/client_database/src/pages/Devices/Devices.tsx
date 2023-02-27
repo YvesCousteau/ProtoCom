@@ -71,9 +71,9 @@ function Item(props: any) {
                 <div className=''>
                     <Paper title={"Device : "+props.device.name} removable={false}>
                         <p className="text-classic pb-1">{"IP : "+props.device.ip}</p>
-                        <p className="text-classic pb-2">
+                        {/* <p className="text-classic pb-2">
                             {props.device && "Functions Numbers : "+props.device.functions.length}
-                        </p>
+                        </p> */}
                         <Link to={'device/'+props.device.name} className="flex justify-center btn btn-classic ">Functions</Link>
                         <button className={`btn ${state === 'unknow' && 'btn-classic'} ${state === false && 'btn-close'} ${state === true && 'btn-open'} mt-4 w-full`} onClick={() => setPing(true)}>{"Ping : "+state}</button>
                     </Paper>
