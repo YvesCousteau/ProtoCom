@@ -36,24 +36,24 @@ export function getServices(setValue: any, setState: any) {
     }
 }
 
-// export function getFunction(setValue: any, name: string, setState: any) {
-//     try {
-//         let result = fetch("/api/function/"+name, {
-//             method: 'GET'
-//         })
-//         result.then((sucess) => { 
-//             console.log(sucess);
-//             if (sucess.ok) { 
-//                 setState({ state: 'Success', url: sucess.url }) 
-//             } else { 
-//                 setState({ state: 'Error', url: sucess.url }) 
-//             }
-//         })
-//         result.then((res) => res.json()).then((data) => setValue(data.data));
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+export function getServiceArguments(setValue: any, name: string, setState: any) {
+    try {
+        let result = fetch("/api/service/single/full/"+name, {
+            method: 'GET'
+        })
+        result.then((sucess) => { 
+            console.log(sucess);
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
+        })
+        result.then((res) => res.json()).then((data) => setValue(data.data));
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export function addDeviceService(body: any, setState: any) {
     try {
@@ -101,7 +101,7 @@ export function deleteDeviceService(body: any, setState: any) {
 }
 export function service(api: string, ip: string, option: string, setState: any) {
     try {
-        let result = fetch(api + option + "/" + ip, {
+        let result = fetch('/api/execution/'+api+'/'+ option + "/" + ip, {
             method: 'POST',
         })
         result.then((sucess) => {

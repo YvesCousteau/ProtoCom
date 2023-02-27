@@ -34,29 +34,6 @@ export default function Functions() {
         }
     }, [state]);
 
-    // // Get Functions Name
-    // useEffect(() => {
-    //     if(functions) {
-    //         const listFunctions: any = [];
-    //         for(const item of functions) {
-    //             listFunctions.push(item.name);
-    //         }
-    //         setFunctionsName(listFunctions);
-    //     }
-    // }, [functions]);
-    // // Get Device functions
-    // useEffect(() => {
-    //     if(device && functionsName) {
-    //         const listDeviceFunctions = [];
-    //         for(const item of device.functions) {  
-    //             if (functionsName.includes(item)) {
-    //                 listDeviceFunctions.push(item);
-    //             }
-    //         }
-    //         setDeviceFunctions(listDeviceFunctions);
-    //     }
-    // }, [functionsName,device]);
-
     return(
         <div className="mx-8">
             <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
@@ -69,7 +46,7 @@ export default function Functions() {
                         <Item 
                         key={index}
                         service={service}
-
+                        device={device}
                         setState={setState}
                         index={index}
                         setRender={setRender}
@@ -98,16 +75,17 @@ export default function Functions() {
 function Item(props: any) {
     const [modalRun, setModalRun] = useState(false);
     const [modalDelete, setModalDelete] = useState(false);
+    
     return(
         <div className='w-full'>
-            {props.function !== null && (
+            {props.service !== null && (
                 <div className=''>
                     <Paper title={"Function : "+props.service.service} deleted={setModalDelete} removable={true} className='w-full'>
                         <p className="text-classic pb-1">{"Device : " + props.service.device}</p>
                         <p className="text-classic pb-1">{"Communication : " + props.service.communication}</p>
                         <button onClick={() => setModalRun(true)} className="w-full btn btn-classic ">Run</button>
                     </Paper>
-                    {/* <RunModal modal={modalRun} setModal={setModalRun} item={props}/> */}
+                    <RunModal modal={modalRun} setModal={setModalRun} item={props}/>
                     <DeleteModal modal={modalDelete} setModal={setModalDelete} item={props}/>
                 </div>
             )}
@@ -187,36 +165,42 @@ function DeleteModal(props: any) {
         </Modal>
     );
 }
-// function RunModal(props: any) {
-//     const [fct, setFct]: any = useState(null);
-//     const [ran, setRan] = useState(false);
-//     const [inputValue, setInputValue] = useState('');
-//     useEffect(() => {
-//         if (props.modal) {
-//             Api.getFunction(setFct, props.item.function, props.item.setState);
-//         }
-//     }, [props.modal]);
-//     useEffect(() => {
-//         if(ran) {
-//             if (fct) {
-//                 Api.service(fct.api, props.item.device.ip, inputValue, props.item.setState);
-//                 props.setModal(false);
-//                 setRan(false);
-//             }
-//         }
-//     }, [ran, fct, inputValue, props]);
-//     return (
-//         <>
-//             {fct && <Modal
-//                 open={props.modal}
-//                 setOpen={props.setModal}
-//                 title="Update"
-//                 subtitle={"Run the service : " + fct.name}>
-//                 <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-//                     <ListBox data={fct.options} setSelected={setInputValue} selected={fct.options[0]}/>
-//                     <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+props.item.function.cmd+" "+inputValue}</button>
-//                 </div>
-//             </Modal>}
-//         </>
-//     );
-// }
+function RunModal(props: any) {
+    const [ran, setRan] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+
+    const [args, setArguments]: any = useState(null);
+    useEffect(() => {
+        if (props.modal) {
+            Api.getServiceArguments(setArguments, props.item.service.service, props.item.setState);
+        }
+    }, [props.modal]);
+    // Function selection
+    useEffect(() => {
+        if (!inputValue && args) {
+            setInputValue(args[0].argument);
+        }
+    }, [inputValue,args]);
+
+    useEffect(() => {
+        if(ran) {
+            Api.service(props.item.service.service, props.item.device[0].ip, inputValue, props.item.setState);
+            props.setModal(false);
+            setRan(false);
+        }
+    }, [ran, inputValue, props]);
+    return (
+        <>
+            {props.item.service && args && <Modal
+                open={props.modal}
+                setOpen={props.setModal}
+                title="Update"
+                subtitle={"Run the service : " + props.item.service.service}>
+                <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                    <ListBox data={args} extension='argument' setSelected={setInputValue} selected={inputValue}/>
+                    <button className='btn btn-open w-full mx-auto'  disabled={inputValue === ''} onClick={() => setRan(true)}>{"Run : "+inputValue}</button>
+                </div>
+            </Modal>}
+        </>
+    );
+}
