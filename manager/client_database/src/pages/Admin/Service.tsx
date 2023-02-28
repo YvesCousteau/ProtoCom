@@ -8,6 +8,8 @@ export function Services(props: any) {
     const [services, setServices]: any = useState([]);
     
     const [inputService, setInputService] = useState(null);
+    const [inputCommunication, setInputCommunication] = useState(null);
+    const [inputRemovable, setInputRemovable] = useState(null);
     useEffect(() => {
         if (!inputService && services && services.length > 0 ) {
             setInputService(services[0].service);
@@ -20,8 +22,12 @@ export function Services(props: any) {
     useEffect(() => {
         if (added) {
             console.log('added');
-            // let body = {scenario:inputScenario};
-            // Api.addService(body,props.setState);
+            let body = {
+                service:inputService,
+                communication:inputCommunication,
+                removable:inputRemovable
+            };
+            Api.addService(body,props.setState);
             setAddModal(false);
             setAdded(false);
         }
@@ -72,13 +78,13 @@ export function Services(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Communication :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        <Input type='text' placeholder='name' onChange={setInputService} />
+                        <Input type='text' placeholder='name' onChange={setInputCommunication} />
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Removable :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        <Input type='number' placeholder='name' onChange={setInputService} />
+                        <Input type='number' placeholder='name' onChange={setInputRemovable} />
                     </div>
                 </div>
             </AddModal>
