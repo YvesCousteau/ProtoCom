@@ -17,15 +17,6 @@ function setup(db) {
                 if (err) {console.log(err)} 
                 else {
                     console.log("Table action just created")
-                    db.run(
-                        `INSERT INTO action (id_device, id_service, id_argument, id_scenario) VALUES
-                            (2, 2, 3, 1),
-                            (2, 2, 4, 2)`,
-                        (err) => {
-                            if (err) {console.log(err)} 
-                            else {console.log("INSERT INTO action just created")}
-                        }
-                    );
                 }
             }
         );
@@ -45,7 +36,9 @@ function setup(db) {
                             ('reboot', 1),
                             ('powerOff', 1),
                             ('play', 2),
-                            ('stop', 2)`,
+                            ('stop', 2),
+                            ('hello', 3),
+                            ('goodbye', 3)`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO argument just created")}
@@ -118,7 +111,10 @@ function setup(db) {
                     db.run(
                         `INSERT INTO service (service, communication, removable) VALUES
                             ('power', 'bash', 0),
-                            ('sound', 'alsa', 1)`,
+                            ('sound', 'alsa', 1),
+                            ('max7219', 'uart', 1),
+                            ('cluster', 'unity', 1),
+                            ('ivi', 'unity', 1)`,
                         (err) => {
                             if (err) {console.log(err)} 
                             else {console.log("INSERT INTO service just created")}
@@ -163,8 +159,11 @@ function setup(db) {
                     db.run(
                         `INSERT INTO rel_device_service (id_service, id_device) VALUES
                             (1, 1),
-                            (1, 3),
                             (1, 2),
+                            (1, 3),
+                            (3, 3),
+                            (4, 2),
+                            (5, 2),
                             (2, 2)`,
                         (err) => {
                             if (err) {console.log(err)} 
