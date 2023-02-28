@@ -4,46 +4,25 @@ import * as Api from "./Api";
 import Alert from "../../components/Alert";
 import Modal from "../../components/Modal";
 import ListBox from "../../components/ListBox";
-import Input from "../../components/Input";
 
 export default function Scenarios() {
     const [modalAdd, setModalAdd] = useState(false);
-    const [devices, setDevices]: any = useState([]);
-    const [devicesName, setDevicesName]: any = useState(null);
-    const [functions, setFunctions]: any = useState([]);
-    const [scenarios, setScenarios] = useState([]);
-    // Alert Message
-    const [state, setState]: any = useState(null);
-    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
-
+    
     const [render, setRender] = useState(false);
-
+    const [scenarios, setScenarios] = useState([]);
     useEffect(() => {
         Api.getScenarios(setScenarios, setState);
     }, [render]);
 
+    const [state, setState]: any = useState(null);
+    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
         if (state) {
             setAlert({ visible: true, type: state.state, status: null, url: state.url });
             setTimeout(() => setAlert({ visible: false, type: null, status: null, url: null }), 2000);
         }
     }, [state]);
-    // Get Devices Name
-    useEffect(() => {
-        if(devices) {
-            const listDevices: any = [];
-            for(const item of devices) {
-                listDevices.push(item.name);
-            }
-            console.log(listDevices);
-            
-            setDevicesName(listDevices);
-        }
-    }, [devices]);
 
-    useEffect(() => {
-        console.log(modalAdd);
-    }, [modalAdd]);
     return(
         <div className="mx-8">
             <div className="rounded-[14px] shadow-md bg-gray-200 px-4 py-4 mx-auto">
@@ -57,7 +36,6 @@ export default function Scenarios() {
                         key={index} 
                         scenario={scenario} 
                         index={index}
-                        devices={devices}
                         setState={setState}
                         setRender={setRender} 
                         render={render}/>
@@ -76,6 +54,156 @@ export default function Scenarios() {
         </div>
     );
 }
+
+function AddModal(props: any) {
+    const [created, setCreated] = useState(false);
+    const [added, setAdded] = useState(false);
+    
+    const [inputScenario, setInputScenario] = useState(null);
+    const [inputDevice, setInputDevice] = useState(null);
+    const [inputService, setInputService] = useState(null);
+    const [inputArgument, setInputArgument] = useState(null);
+
+    const [idScenario, setIdScenario] = useState(null);
+    const [idDevice, setIdDevice] = useState(null);
+    const [idService, setIdService] = useState(null);
+    const [idArgument, setIdArgument] = useState(null);
+
+    const [actions, setActions]: any = useState([]);
+    const [devices, setDevices]: any = useState(null);
+    const [deviceServices, setDeviceServices]: any = useState(null);
+    const [serviceArguments, setServiceArguments]: any = useState(null);
+
+    useEffect(() => {
+        if (!inputScenario && props.scenarios && props.scenarios.length > 0 ) {
+            setInputScenario(props.scenarios[0].scenario);
+        }
+    }, [inputScenario,props.scenarios]);
+
+
+    useEffect(() => {
+        if (props.modal) {
+            Api.getDevices(setDevices, props.setState);
+        }
+        if (!props.modal) {
+            setActions([]);
+        }
+    }, [props.modal]);
+    useEffect(() => {
+        if (!inputDevice && devices && devices.length > 0 ) {
+            setInputDevice(devices[0].device);
+        }
+    }, [inputDevice,devices]);
+
+    useEffect(() => {
+        if(!inputDevice && devices && devices.length > 0) {
+            Api.getDeviceServices(setDeviceServices, devices[0].device,props.setState);
+        } 
+        else if(props.modal) {
+            Api.getDeviceServices(setDeviceServices, inputDevice,props.setState);
+        }
+    }, [inputDevice,props.setState,devices]);
+    useEffect(() => { 
+        if (deviceServices && deviceServices.length > 0) {
+            setInputService(deviceServices[0].service);
+        }
+    }, [deviceServices]);
+    
+    useEffect(() => {
+        if(!inputService && deviceServices && deviceServices.length > 0) {
+            Api.getServiceArguments(setServiceArguments, deviceServices[0].device,props.setState);
+        } 
+        else if(props.modal) {
+            Api.getServiceArguments(setServiceArguments, inputService,props.setState);
+        }
+    }, [inputService,props.setState,deviceServices]);
+    useEffect(() => {
+        if (serviceArguments && serviceArguments.length > 0) {
+            setInputArgument(serviceArguments[0].argument);
+        }
+    }, [serviceArguments]);
+
+    useEffect(() => {
+        if(created && actions) {
+            for (const item of actions) {
+                const body = { 
+                    id_device:item.id_device, 
+                    id_service:item.id_service, 
+                    id_argument:item.id_argument, 
+                    id_scenario:item.id_scenario
+                }            
+                Api.addAction(body,props.setState);
+            }
+            props.setModal(false);
+            props.setRender(!props.render);
+            setCreated(false)
+        }
+    }, [created, inputDevice, inputService, inputArgument, actions, props]);
+
+    useEffect(() => {
+        if (added && inputDevice && inputService && inputArgument) {
+            
+            setActions([...actions,{ 
+                scenario: inputScenario, 
+                id_scenario: idScenario,
+                device: inputDevice,
+                id_device: idDevice, 
+                service: inputService, 
+                id_service: idService, 
+                arg: inputArgument, 
+                id_argument: idArgument }])
+            setAdded(false);
+        }
+    }, [added, inputDevice, inputService, inputArgument, actions]);
+
+    return (
+        <Modal
+            open={props.modal}
+            setOpen={props.setModal}
+            title="Add"
+            subtitle="Setup your scenario">
+            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Scenario :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        {props.scenarios && props.scenarios.length > 0  && <ListBox data={props.scenarios} extension='scenario' setSelected={setInputScenario} selected={inputScenario} setID={setIdScenario}/>}
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Device :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        {devices && devices.length > 0  && <ListBox data={devices} extension='device' setSelected={setInputDevice} selected={inputDevice} setID={setIdDevice}/>}
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Service :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        {deviceServices && deviceServices.length > 0 && <ListBox data={deviceServices} extension='service' setSelected={setInputService} selected={inputService} setID={setIdService}/>}
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Argument :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        {serviceArguments && serviceArguments.length > 0 && <ListBox data={serviceArguments} extension='argument' setSelected={setInputArgument} selected={inputArgument} setID={setIdArgument}/>}
+                    </div>
+                </div>
+                <div className="ml-40 grid grid-cols-2 gap-4">
+                    <button className='btn btn-classic w-32 mx-auto' onClick={() => setAdded(true)}>Add Item</button>
+                    <button className='btn btn-open w-32 mx-auto' onClick={() => setCreated(true)} disabled={actions === null}>Send</button>
+                </div>
+                {actions && actions.length > 0 && actions.map((item: any, index: number) =>
+                    <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
+                        <p className="text-classic pb-1">{"Device: " + item.device + '| ip: '+item.id_device}</p>
+                        <p className="text-classic pb-1">{"Function: " + item.service + '| ip: '+item.id_service}</p>
+                        <p className="text-classic pb-1">{"Argument: " + item.arg + '| ip: '+item.id_argument}</p>
+                    </div>
+                )}
+            </div>
+        </Modal>
+    );
+}
+
+
 function Item(props: any) {
     const [modalDelete, setModalDelete] = useState(false);
     const [ran, setRan] = useState(false);
@@ -129,184 +257,6 @@ function Item(props: any) {
     );
 }
 
-function AddModal(props: any) {
-    const [created, setCreated] = useState(false);
-    const [added, setAdded] = useState(false);
-    
-    const [inputDevice, setInputDevice] = useState(null);
-    const [inputService, setInputService] = useState(null);
-    const [inputArgument, setInputArgument] = useState(null);
-    const [inputScenario, setInputScenario] = useState(null);
-
-    const [actions, setActions]: any = useState([]);
-    const [devices, setDevices]: any = useState(null);
-    const [deviceServices, setDeviceServices]: any = useState(null);
-    const [serviceArguments, setServiceArguments]: any = useState(null);
-
-
-    // Device selection
-    useEffect(() => {
-        if (!inputScenario && props.scenarios && props.scenarios.length > 0 ) {
-            setInputScenario(props.scenarios[0].scenario);
-        }
-    }, [inputScenario,props.scenarios]);
-
-    useEffect(() => {
-        if (props.modal) {
-            Api.getDevices(setDevices, props.setState);
-        }
-        if (!props.modal) {
-            setActions([]);
-        }
-    }, [props.modal]);
-    // Device selection
-    useEffect(() => {
-        if (!inputDevice && devices && devices.length > 0 ) {
-            setInputDevice(devices[0].device);
-        }
-    }, [inputDevice,devices]);
-
-    useEffect(() => {
-        if(!inputDevice && devices && devices.length > 0) {
-            Api.getDeviceServices(setDeviceServices, devices[0].device,props.setState);
-        } 
-        else if(props.modal) {
-            console.log("la on change les options");
-            Api.getDeviceServices(setDeviceServices, inputDevice,props.setState);
-        }
-    }, [inputDevice,props.setState,devices]);
-
-    // Service selection
-    useEffect(() => {
-        console.log(deviceServices);
-        
-        if (deviceServices && deviceServices.length > 0) {
-            setInputService(deviceServices[0].service);
-        }
-    }, [deviceServices]);
-    
-    useEffect(() => {
-        if(!inputService && deviceServices && deviceServices.length > 0) {
-            Api.getServiceArguments(setServiceArguments, deviceServices[0].device,props.setState);
-        } 
-        else if(props.modal) {
-            Api.getServiceArguments(setServiceArguments, inputService,props.setState);
-        }
-    }, [inputService,props.setState,deviceServices]);
-
-    // Argument selection
-    useEffect(() => {
-        if (serviceArguments && serviceArguments.length > 0) {
-            setInputArgument(serviceArguments[0].argument);
-        }
-    }, [serviceArguments]);
-
-    useEffect(() => {
-        if(created && actions) {
-            for (const item of actions) {
-                const body = { 
-                    id_device:item.id_device, 
-                    id_service:item.id_service, 
-                    id_argument:item.id_argument, 
-                    id_scenario:item.id_scenario
-                }
-                console.log(body);
-                
-                Api.addAction(body,props.setState);
-            }
-            props.setModal(false);
-            props.setRender(!props.render);
-            setCreated(false)
-        }
-    }, [created, inputDevice, inputService, inputArgument, actions, props]);
-
-    useEffect(() => {
-        if (added && inputDevice && inputService && inputArgument) {
-            let id_device;
-            for (const item of devices) {
-                if (item.device === inputDevice) {
-                    id_device = item.id;
-                }
-            }
-            let id_service;
-            for (const item of deviceServices) {
-                if (item.service === inputService) {
-                    id_service = item.id_service;
-                }
-            }
-            let id_argument;
-            for (const item of serviceArguments) {
-                if (item.argument === inputArgument) {
-                    id_argument = item.id_argument;
-                }
-            } 
-            let id_scenario;
-            for (const item of props.scenarios) {
-                console.log(item);
-                
-                if (item.scenario === inputScenario) {
-                    id_scenario = item.id;
-                }
-            } 
-            setActions([...actions,{ 
-                scenario: inputScenario, 
-                id_scenario: id_scenario,
-                device: inputDevice,
-                id_device: id_device, 
-                service: inputService, 
-                id_service: id_service, 
-                arg: inputArgument, 
-                id_argument: id_argument }])
-            setAdded(false);
-        }
-    }, [added, inputDevice, inputService, inputArgument, actions]);
-
-    return (
-        <Modal
-            open={props.modal}
-            setOpen={props.setModal}
-            title="Add"
-            subtitle="Setup your scenario">
-            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Scenario :&nbsp;</p>
-                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.scenarios && props.scenarios.length > 0  && <ListBox data={props.scenarios} extension='scenario' setSelected={setInputScenario} selected={inputScenario}/>}
-                    </div>
-                </div>
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Device :&nbsp;</p>
-                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {devices && devices.length > 0  && <ListBox data={devices} extension='device' setSelected={setInputDevice} selected={inputDevice}/>}
-                    </div>
-                </div>
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Service :&nbsp;</p>
-                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {deviceServices && deviceServices.length > 0 && <ListBox data={deviceServices} extension='service' setSelected={setInputService} selected={inputService}/>}
-                    </div>
-                </div>
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Argument :&nbsp;</p>
-                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {serviceArguments && serviceArguments.length > 0 && <ListBox data={serviceArguments} extension='argument' setSelected={setInputArgument} selected={inputArgument}/>}
-                    </div>
-                </div>
-                <div className="ml-40 grid grid-cols-2 gap-4">
-                    <button className='btn btn-classic w-32 mx-auto' onClick={() => setAdded(true)}>Add Item</button>
-                    <button className='btn btn-open w-32 mx-auto' onClick={() => setCreated(true)} disabled={actions === null}>Send</button>
-                </div>
-                {actions && actions.length > 0 && actions.map((item: any, index: number) =>
-                    <div key={index} className="grid grid-cols-3 gap-2 border-4 p-2 my-2 rounded-2xl">
-                        <p className="text-classic pb-1">{"Device: " + item.device + '| ip: '+item.id_device}</p>
-                        <p className="text-classic pb-1">{"Function: " + item.service + '| ip: '+item.id_service}</p>
-                        <p className="text-classic pb-1">{"Argument: " + item.arg + '| ip: '+item.id_argument}</p>
-                    </div>
-                )}
-            </div>
-        </Modal>
-    );
-}
 
 function DeleteModal(props: any) {
     const [deleted, setDeleted] = useState(false);
