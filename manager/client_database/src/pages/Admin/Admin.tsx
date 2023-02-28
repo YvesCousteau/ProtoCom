@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import Alert from "../../components/Alert";
+import Input from "../../components/Input";
 import ListBox from "../../components/ListBox";
 import Modal from "../../components/Modal";
 import * as Api from "./Api";
+import { Devices } from "./Device";
+import { Scenarios } from "./Scenario";
+import { Services } from "./Service";
 
 export default function Admin() {
     // Alert Message
@@ -30,189 +34,8 @@ export default function Admin() {
         </div>
     );
 }
-function Devices(props: any) {
-    const [devices, setDevices]: any = useState([]);
-    
-    const [inputDevice, setInputDevice] = useState(null);
-    useEffect(() => {
-        if (!inputDevice && devices && devices.length > 0 ) {
-            setInputDevice(devices[0].device);
-        }
-    }, [inputDevice,devices]);
-    
-    const [added, setAdded] = useState(false);
-    const [updated, setUpdated] = useState(false);
-    const [deleted, setDeleted] = useState(false);
-    useEffect(() => {
-        if (added) {
-            console.log('added');
-            setAddModal(false);
-            setAdded(false);
-        }
-    }, [added]);
-    useEffect(() => {
-        if (updated) {
-            console.log('updated');
-            setUpdateModal(false);
-            setUpdated(false);
-        }
-    }, [updated]);
-    useEffect(() => {
-        if (deleted) {
-            console.log('deleted');
-            Api.deleteDevice(inputDevice,props.setState);
-            setDeletModal(false);
-            setDeleted(false);
-        }
-    }, [deleted]);
 
-    useEffect(() => {
-        setInputDevice(null);
-        Api.getDevices(setDevices, props.setState);
-    },[deleted]);
-    
-    const [addModal, setAddModal] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false);
-    const [deleteModal, setDeletModal] = useState(false);
-    return(
-        <div className="grid grid-cols-1 gap-4 bg-gray-300 mb-4 p-6 rounded-2xl">
-            <p className="text-classic">Device</p>
-            <div className="grid grid-cols-7">
-                <p className="self-center text-classic">Selection :&nbsp;</p>
-                <div className=" col-span-4 relative rounded-md shadow-sm h-full">
-                    {devices && devices.length > 0 && <ListBox data={devices} extension='device' setSelected={setInputDevice} selected={inputDevice}/>}
-                </div>
-                <Buttons setAdded={setAddModal} setUpdated={setUpdateModal} setDeleted={setDeletModal}/>
-            </div>
-            <AddModal modal={addModal} setModal={setAddModal} setAdded={setAdded}/>
-            <UpdateModal modal={updateModal} setModal={setUpdateModal} setUpdated={setUpdated}/>
-            <DeleteModal modal={deleteModal} setModal={setDeletModal} setDeleted={setDeleted}/>
-        </div>
-    );
-}
-function Services(props: any) {
-    const [services, setServices]: any = useState([]);
-    
-    const [inputService, setInputService] = useState(null);
-    useEffect(() => {
-        if (!inputService && services && services.length > 0 ) {
-            setInputService(services[0].service);
-        }
-    }, [inputService,services]);
-    
-    const [added, setAdded] = useState(false);
-    const [updated, setUpdated] = useState(false);
-    const [deleted, setDeleted] = useState(false);
-    useEffect(() => {
-        if (added) {
-            console.log('added');
-            setAddModal(false);
-            setAdded(false);
-        }
-    }, [added]);
-    useEffect(() => {
-        if (updated) {
-            console.log('updated');
-            setUpdateModal(false);
-            setUpdated(false);
-        }
-    }, [updated]);
-    useEffect(() => {
-        if (deleted) {
-            console.log('deleted');
-            Api.deleteService(inputService,props.setState);
-            setDeletModal(false);
-            setDeleted(false);
-        }
-    }, [deleted]);
-
-    useEffect(() => {
-        setInputService(null);
-        Api.getServices(setServices, props.setState);
-    },[deleted]);
-
-    const [addModal, setAddModal] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false);
-    const [deleteModal, setDeletModal] = useState(false);
-    return(
-        <div className="grid grid-cols-1 gap-4 bg-gray-300 mb-4 p-6 rounded-2xl">
-            <p className="text-classic">Service</p>
-            <div className="grid grid-cols-7">
-                <p className="self-center text-classic">Selection :&nbsp;</p>
-                <div className=" col-span-4 relative rounded-md shadow-sm h-full">
-                    {services && services.length > 0 && <ListBox data={services} extension='service' setSelected={setInputService} selected={inputService}/>}
-                </div>
-                <Buttons setAdded={setAddModal} setUpdated={setUpdateModal} setDeleted={setDeletModal}/>
-            </div>
-            <AddModal modal={addModal} setModal={setAddModal} setAdded={setAdded}/>
-            <UpdateModal modal={updateModal} setModal={setUpdateModal} setUpdated={setUpdated}/>
-            <DeleteModal modal={deleteModal} setModal={setDeletModal} setDeleted={setDeleted}/>
-        </div>
-);
-}
-function Scenarios(props: any) {
-    const [scenarios, setScenarios]: any = useState([]);
-    
-    const [inputScenario, setInputScenario] = useState(null);
-    useEffect(() => {
-        if (!inputScenario && scenarios && scenarios.length > 0 ) {
-            setInputScenario(scenarios[0].scenario);
-        }
-    }, [inputScenario,scenarios]);
-
-    const [added, setAdded] = useState(false);
-    const [updated, setUpdated] = useState(false);
-    const [deleted, setDeleted] = useState(false);
-    useEffect(() => {
-        if (added) {
-            console.log('added');
-            setAddModal(false);
-            setAdded(false);
-        }
-    }, [added]);
-    useEffect(() => {
-        if (updated) {
-            console.log('updated');
-            setUpdateModal(false);
-            setUpdated(false);
-        }
-    }, [updated]);
-    useEffect(() => {
-        if (deleted) {
-            console.log('deleted');
-            Api.deleteScenario(inputScenario,props.setState);
-            setDeletModal(false);
-            setDeleted(false);
-        }
-    }, [deleted]);
-
-    useEffect(() => {
-        setInputScenario(null);
-        Api.getScenarios(setScenarios, props.setState);
-    },[deleted]);
-
-    const [addModal, setAddModal] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false);
-    const [deleteModal, setDeletModal] = useState(false);
-
-    
-    return(
-        <div className="grid grid-cols-1 gap-4 bg-gray-300 mb-4 p-6 rounded-2xl">
-            <p className="text-classic">Scenario</p>
-            <div className="grid grid-cols-7">
-                <p className="self-center text-classic">Selection :&nbsp;</p>
-                <div className=" col-span-4 relative rounded-md shadow-sm h-full">
-                    {scenarios && scenarios.length > 0 && <ListBox data={scenarios} extension='scenario' setSelected={setInputScenario} selected={inputScenario}/>}
-                </div>
-                <Buttons setAdded={setAddModal} setUpdated={setUpdateModal} setDeleted={setDeletModal}/>
-            </div>
-            <AddModal modal={addModal} setModal={setAddModal} setAdded={setAdded}/>
-            <UpdateModal modal={updateModal} setModal={setUpdateModal} setUpdated={setUpdated}/>
-            <DeleteModal modal={deleteModal} setModal={setDeletModal} setDeleted={setDeleted}/>
-        </div>
-    );
-}
-function Buttons(props: any) {
+export function Buttons(props: any) {
     return(
         <div className="h-full col-span-2 place-self-end ">
             <button className='h-full ml-2 text-center btn btn-close w-14' onClick={() => props.setDeleted(true)}>
@@ -235,40 +58,42 @@ function Buttons(props: any) {
     );
 }
 
-function AddModal(props: any) {
+export function AddModal(props: any) {
     return (
         <Modal
             open={props.modal}
             setOpen={props.setModal}
-            title="Remove"
+            title={"Add "+props.title}
             subtitle="All functions associated with this devices will be remove">
             <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                {props.children}
                 <button className='btn btn-open w-32 mx-auto' onClick={() => props.setAdded(true)}>Add</button>
             </div>
         </Modal>
     );
 }
 
-function UpdateModal(props: any) {
+export function UpdateModal(props: any) {
     return (
         <Modal
             open={props.modal}
             setOpen={props.setModal}
-            title="Remove"
+            title={"Update "+props.title}
             subtitle="All functions associated with this devices will be remove">
             <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                {props.children}
                 <button className='btn btn-open w-32 mx-auto' onClick={() => props.setUpdated(true)}>Update</button>
             </div>
         </Modal>
     );
 }
 
-function DeleteModal(props: any) {
+export function DeleteModal(props: any) {
     return (
         <Modal
             open={props.modal}
             setOpen={props.setModal}
-            title="Remove"
+            title={"Remove "+props.title}
             subtitle="All functions associated with this devices will be remove">
             <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
                 <button className='btn btn-open w-32 mx-auto' onClick={() => props.setDeleted(true)}>Remove</button>

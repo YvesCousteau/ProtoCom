@@ -86,6 +86,43 @@ function scenario(app,db) {
                 })
             });
     });
+    // =========================================================== //
+    app.post("/api/scenario/add/single", (req, res, next) => {
+        db.run(
+            `INSERT INTO 
+                scenario (scenario) 
+            VALUES 
+                (?)`, 
+            [req.body.scenario], function (err, result) {
+            if (err) {
+                res.status(400).json({ "error": err.message })
+                return;
+            }
+            res.json({
+                "message": "success"
+            })
+        });
+    });
+    app.patch("/api/scenario/update/single/:name", (req, res, next) => {
+        console.log(req.body.scenario,req.params.name);
+        db.run(
+            `UPDATE 
+                scenario 
+            SET
+                scenario = COALESCE(?,scenario)
+            WHERE scenario LIKE ?`,
+            [req.body.scenario, req.params.name],
+            function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({ "error": res.message })
+                    return;
+                }
+                res.json({
+                    "message": "success"
+                })
+            });
+    });
     app.delete("/api/scenario/delete/single/:name", (req, res, next) => {
         console.log(req.params.name);
         db.run(
@@ -100,102 +137,6 @@ function scenario(app,db) {
                 })
         });
     });
-    // app.post("/api/scenario/add/action", (req, res, next) => {
-    //     db.run(
-    //         `INSERT INTO 
-    //             action (id_device, id_service, id_argument, id_scenario) 
-    //         VALUES 
-    //             (?,?,?,?)`, 
-    //         [req.body.id_device,req.body.id_service,req.body.id_argument,req.body.id_scenario], function (err, result) {
-    //         if (err) {
-    //             res.status(400).json({ "error": err.message })
-    //             return;
-    //         }
-    //         res.json({
-    //             "message": "success"
-    //         })
-    //     });
-    // });
-    // app.post("/api/scenario/add/:name", (req, res, next) => {
-    //     db.run(
-    //         `INSERT INTO 
-    //             scenario (scenario) 
-    //         VALUES 
-    //             (?)`, 
-    //         [req.params.name], function (err, result) {
-    //         if (err) {
-    //             res.status(400).json({ "error": err.message })
-    //             return;
-    //         }
-    //         res.json({
-    //             "message": "success"
-    //         })
-    //     });
-    // });
-    // app.delete("/api/scenario/delete", (req, res, next) => {
-    //     db.run(
-    //         'DELETE FROM scenario WHERE scenario.scenario LIKE ?',
-    //         [req.params.name], function (err, result) {
-    //             if (err) {
-    //                 res.status(400).json({ "error": res.message })
-    //                 return;
-    //             }
-    //             res.json({ 
-    //                 "message": "success"
-    //             })
-    //     });
-    // });
-    // ================================================================
-    // app.post("/api/device/", (req, res, next) => {
-    //     db.run(
-    //         `INSERT INTO 
-    //             device (name, ip, voltage, amperage) 
-    //         VALUES 
-    //             (?,?,?,?)`, 
-    //         [req.body.name,req.body.ip,req.body.voltage,req.body.amperage], function (err, result) {
-    //         if (err) {
-    //             res.status(400).json({ "error": err.message })
-    //             return;
-    //         }
-    //         res.json({
-    //             "message": "success"
-    //         })
-    //     });
-    // });
-    // app.patch("/api/device/:name", (req, res, next) => {
-    //     db.run(
-    //         `UPDATE 
-    //             device 
-    //         SET
-    //             device.name = COALESCE(?,name),
-    //             device.ip = COALESCE(?,ip),
-    //             device.voltage = COALESCE(?,voltage),
-    //             device.amperage = COALESCE(?,amperage), 
-    //         WHERE device.name LIKE ?`,
-    //         [req.body.name, req.body.ip, req.body.voltage, req.body.amperage, req.params.name],
-    //         function (err, result) {
-    //             if (err) {
-    //                 res.status(400).json({ "error": res.message })
-    //                 return;
-    //             }
-    //             res.json({
-    //                 "message": "success"
-    //             })
-    //         });
-    // });
-    // app.delete("/api/device/:name", (req, res, next) => {
-    //     db.run(
-    //         'DELETE FROM device WHERE device.name LIKE ?',
-    //         [req.params.name], function (err, result) {
-    //             if (err) {
-    //                 res.status(400).json({ "error": res.message })
-    //                 return;
-    //             }
-    //             res.json({ 
-    //                 "message": "success"
-    //             })
-    //     });
-    // });
 }
 
 module.exports = { scenario };
