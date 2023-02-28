@@ -102,7 +102,7 @@ function device(app,db) {
                 device (device,ip,voltage,amperage) 
             VALUES 
                 (?,?,?,?)`, 
-            [req.body.device,req.body.ip,req.body.voltage,,req.body.amperage], function (err, result) {
+            [req.body.device,req.body.ip,req.body.voltage,req.body.amperage], function (err, result) {
             if (err) {
                 res.status(400).json({ "error": err.message })
                 return;
@@ -123,7 +123,7 @@ function device(app,db) {
                 voltage = COALESCE(?,voltage),
                 amperage = COALESCE(?,amperage)
             WHERE device LIKE ?`,
-            [req.body.device,req.body.ip,req.body.voltage,,req.body.amperage, req.params.name],
+            [req.body.device,req.body.ip,req.body.voltage,req.body.amperage, req.params.name],
             function (err, result) {
                 if (err) {
                     console.log(err);
