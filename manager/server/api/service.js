@@ -15,7 +15,6 @@ function service(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -35,7 +34,6 @@ function service(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -59,7 +57,6 @@ function service(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -103,7 +100,6 @@ function service(app,db) {
         });
     });
     app.patch("/api/service/update/single/:name", (req, res, next) => {
-        console.log(req.body.scenario,req.params.name);
         db.run(
             `UPDATE 
                 service 
@@ -115,7 +111,6 @@ function service(app,db) {
             [req.body.service,req.body.communication,req.body.removable, req.params.name],
             function (err, result) {
                 if (err) {
-                    console.log(err);
                     res.status(400).json({ "error": res.message })
                     return;
                 }

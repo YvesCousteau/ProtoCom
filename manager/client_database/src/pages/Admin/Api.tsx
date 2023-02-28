@@ -52,6 +52,24 @@ export function getServices(setValue: any, setState: any) {
         console.log(error);
     }
 }
+export function getServiceArguments(setValue: any,name: any, setState: any) {
+    try {
+        let result = fetch("/api/service/single/full/"+name, {
+            method: 'GET'
+        })
+        result.then((sucess) => {
+            console.log(sucess);
+            if (sucess.ok) { 
+                setState({ state: 'Success', url: sucess.url }) 
+            } else { 
+                setState({ state: 'Error', url: sucess.url }) 
+            }
+        })
+        result.then((res) => res.json()).then((data) => setValue(data.data));
+    } catch (error) {
+        console.log(error);
+    }
+}
 // =========================================================== //
 export function addDevice(body: any, setState: any) {
     try {
@@ -262,6 +280,8 @@ export function addArgument(body: any, setState: any) {
     }
 }
 export function updateArgument(body: any,name: any, setState: any) {
+    console.log(body);
+    
     try {
         let result = fetch("/api/argument/update/single/"+name, {
             method: 'PATCH',
@@ -284,6 +304,8 @@ export function updateArgument(body: any,name: any, setState: any) {
     }
 }
 export function deleteArgument(name: any, setState: any) {
+    console.log(name);
+    
     try {
         let result = fetch("/api/argument/delete/single/"+name, {
             method: 'DELETE'

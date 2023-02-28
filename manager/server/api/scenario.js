@@ -17,7 +17,6 @@ function scenario(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -35,7 +34,6 @@ function scenario(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -62,7 +60,6 @@ function scenario(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -104,7 +101,6 @@ function scenario(app,db) {
         });
     });
     app.patch("/api/scenario/update/single/:name", (req, res, next) => {
-        console.log(req.body.scenario,req.params.name);
         db.run(
             `UPDATE 
                 scenario 
@@ -114,7 +110,6 @@ function scenario(app,db) {
             [req.body.scenario, req.params.name],
             function (err, result) {
                 if (err) {
-                    console.log(err);
                     res.status(400).json({ "error": res.message })
                     return;
                 }

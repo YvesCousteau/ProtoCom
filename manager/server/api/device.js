@@ -19,7 +19,6 @@ function device(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -40,7 +39,6 @@ function device(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -68,7 +66,6 @@ function device(app,db) {
                     res.status(400).json({ "error": res.message })
                     return;
                 }
-                console.log(rows);
                 res.json({
                     "message": "success",
                     "data": rows,
@@ -113,7 +110,6 @@ function device(app,db) {
         });
     });
     app.patch("/api/device/update/single/:name", (req, res, next) => {
-        console.log(req.body.scenario,req.params.name);
         db.run(
             `UPDATE 
                 device 
@@ -126,7 +122,6 @@ function device(app,db) {
             [req.body.device,req.body.ip,req.body.voltage,req.body.amperage, req.params.name],
             function (err, result) {
                 if (err) {
-                    console.log(err);
                     res.status(400).json({ "error": res.message })
                     return;
                 }

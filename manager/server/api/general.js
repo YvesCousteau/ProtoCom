@@ -1,7 +1,6 @@
 function ping(app) {
     app.get("/api/ping/:ip", (req, res) => {
         try {
-            console.log("ping -c 1 "+req.params.ip + " | grep 100% | wc -l");
             exec("ping -c 1 "+req.params.ip + " | grep 100% | wc -l", function (error, stdout, stderr) {
                 if (stdout > 0) {
                     stdout = false;
