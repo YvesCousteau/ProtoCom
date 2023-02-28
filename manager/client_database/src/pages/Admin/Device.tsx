@@ -12,6 +12,9 @@ export function Devices(props: any) {
     const [inputVoltage, setInputVoltage] = useState(null);
     const [inputAmperage, setInputAmperage] = useState(null);
 
+    const [inputDeviceUpdated, setInputDeviceUpdated] = useState(null);
+
+
     useEffect(() => {
         if (!inputDevice && devices && devices.length > 0 ) {
             setInputDevice(devices[0].device);
@@ -38,8 +41,13 @@ export function Devices(props: any) {
     useEffect(() => {
         if (updated) {
             console.log('updated');
-            // let body = {scenario:inputScenarioUpdated};
-            // Api.updateDevice(body,inputDevice,props.setState);
+            let body = {
+                device:inputDeviceUpdated,
+                ip:inputIP,
+                voltage:inputVoltage,
+                amperage:inputAmperage
+            };
+            Api.updateDevice(body,inputDevice,props.setState);
             setUpdateModal(false);
             setUpdated(false);
         }
@@ -101,7 +109,25 @@ export function Devices(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {/* <Input type='text' placeholder='name' onChange={setInputServiceUpdated} /> */}
+                        <Input type='text' placeholder='name' onChange={setInputDeviceUpdated} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">IP :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        <Input type='text' placeholder='name' onChange={setInputIP} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Voltage :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        <Input type='number' placeholder='number' onChange={setInputVoltage} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Amperage :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        <Input type='number' placeholder='number' onChange={setInputAmperage} />
                     </div>
                 </div>
             </UpdateModal>

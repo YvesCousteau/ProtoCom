@@ -10,6 +10,9 @@ export function Services(props: any) {
     const [inputService, setInputService] = useState(null);
     const [inputCommunication, setInputCommunication] = useState(null);
     const [inputRemovable, setInputRemovable] = useState(null);
+
+    const [inputServiceUpdated, setInputServiceUpdated] = useState(null);
+
     useEffect(() => {
         if (!inputService && services && services.length > 0 ) {
             setInputService(services[0].service);
@@ -35,8 +38,12 @@ export function Services(props: any) {
     useEffect(() => {
         if (updated) {
             console.log('updated');
-            // let body = {scenario:inputScenarioUpdated};
-            // Api.updateService(body,inputService,props.setState);
+            let body = {
+                service:inputServiceUpdated,
+                communication:inputCommunication,
+                removable:inputRemovable
+            };
+            Api.updateService(body,inputService,props.setState);
             setUpdateModal(false);
             setUpdated(false);
         }
@@ -92,7 +99,19 @@ export function Services(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {/* <Input type='text' placeholder='name' onChange={setInputServiceUpdated} /> */}
+                        <Input type='text' placeholder='name' onChange={setInputServiceUpdated} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Communication :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        <Input type='text' placeholder='name' onChange={setInputCommunication} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Removable :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        <Input type='number' placeholder='name' onChange={setInputRemovable} />
                     </div>
                 </div>
             </UpdateModal>
