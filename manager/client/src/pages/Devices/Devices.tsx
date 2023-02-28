@@ -9,14 +9,11 @@ import { time } from "console";
 
 export default function Device() {
     const [devices, setDevices] = useState([]);
-    const [diagram, setDiagram] = useState(false);
-    const [diagramLoaded, setDiagramLoaded] = useState(false);
-    // Alert Message
-    const [state, setState]: any = useState(null);
-    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
         Api.getDevices(setDevices, setState);
     },[]);
+    const [state, setState]: any = useState(null);
+    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
         if (state) {
             setAlert({ visible: true, type: state.state, status: null, url: state.url });
@@ -24,20 +21,18 @@ export default function Device() {
         }
     }, [state]);
 
+    const [diagram, setDiagram] = useState(false);
     useEffect(() => {
         if (diagram) {
             Api.getDiagram(setState);
-            setTimeout(() => setDiagramLoaded(true), 2000);
+            setTimeout(() => Diagram(), 2000);
             setDiagram(false);
         }
     }, [diagram]);
 
-    useEffect(() => {
-        if (diagramLoaded) {
-            saveAs(photo, "diagram.png");
-            setDiagramLoaded(false);
-        }
-    }, [diagramLoaded]);
+    function Diagram() {
+        saveAs(photo, "diagram.png");
+    }
     
     return(
         <div className="mx-8">
