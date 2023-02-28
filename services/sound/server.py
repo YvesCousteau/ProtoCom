@@ -1,11 +1,12 @@
 # This is server code to send video and audio frames over UDP
 
 import socket
+import sys
 import threading, wave, pyaudio, time
 import math
-host_name = socket.gethostname()
-host_ip = '192.168.1.104'#  socket.gethostbyname(host_name)
-print(host_ip)
+
+
+host_ip = sys.argv[1]
 port = 9633
 # For details visit: www.pyshine.com
 
@@ -17,7 +18,7 @@ def audio_stream_UDP():
 
 	server_socket.bind((host_ip, (port)))
 	CHUNK = 10*1024
-	wf = wave.open("temp.wav.wav")
+	wf = wave.open("../../assets/music/file_example.wav")
 	p = pyaudio.PyAudio()
 	print('server listening at',(host_ip, (port)),wf.getframerate())
 	stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),

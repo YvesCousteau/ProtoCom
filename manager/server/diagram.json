@@ -11,6 +11,17 @@
         "removable": 0
     },
     {
+        "id": 2,
+        "device": "ThinkPad",
+        "ip": "192.168.1.7",
+        "voltage": 20,
+        "amperage": 7,
+        "id_service": 1,
+        "service": "power",
+        "communication": "bash",
+        "removable": 0
+    },
+    {
         "id": 3,
         "device": "Raspberry_1",
         "ip": "192.168.1.175",
@@ -22,15 +33,37 @@
         "removable": 0
     },
     {
+        "id": 3,
+        "device": "Raspberry_1",
+        "ip": "192.168.1.175",
+        "voltage": 5,
+        "amperage": 3,
+        "id_service": 3,
+        "service": "max7219",
+        "communication": "uart",
+        "removable": 1
+    },
+    {
         "id": 2,
         "device": "ThinkPad",
         "ip": "192.168.1.7",
         "voltage": 20,
         "amperage": 7,
-        "id_service": 1,
-        "service": "power",
-        "communication": "bash",
-        "removable": 0
+        "id_service": 4,
+        "service": "cluster",
+        "communication": "unity",
+        "removable": 1
+    },
+    {
+        "id": 2,
+        "device": "ThinkPad",
+        "ip": "192.168.1.7",
+        "voltage": 20,
+        "amperage": 7,
+        "id_service": 5,
+        "service": "ivi",
+        "communication": "unity",
+        "removable": 1
     },
     {
         "id": 2,

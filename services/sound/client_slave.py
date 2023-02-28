@@ -7,7 +7,7 @@ port = 9633
 bufferSize = 65536
 ip = sys.argv[1]
 chunk = 1024
-wf = wave.open("../../assets/file_example.wav")
+wf = wave.open("../../assets/music/file_example.wav")
 p = pyaudio.PyAudio()
 
 # Create a socket at client side
