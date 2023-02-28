@@ -99,15 +99,16 @@ function device(app,db) {
                 device (device,ip,voltage,amperage) 
             VALUES 
                 (?,?,?,?)`, 
-            [req.body.device,req.body.ip,req.body.voltage,req.body.amperage], function (err, result) {
-            if (err) {
-                res.status(400).json({ "error": err.message })
-                return;
-            }
-            res.json({
-                "message": "success"
-            })
-        });
+            [req.body.device,req.body.ip,req.body.voltage,req.body.amperage], 
+            function (err, result) {
+                if (err) {
+                    res.status(400).json({ "error": err.message })
+                    return;
+                }
+                res.json({
+                    "message": "success",
+                })
+            });
     });
     app.patch("/api/device/update/single/:name", (req, res, next) => {
         db.run(

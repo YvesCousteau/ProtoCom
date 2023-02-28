@@ -5,36 +5,23 @@ digraph G {
 		Manager [fillcolor=cyan style=filled]
 		power_1 [fillcolor=darkgreen style=filled]
 		Manager -> power_1 [label=bash len=2.0]
-		sound_1 [fillcolor=darkgreen style=filled]
-		Manager -> sound_1 [label=alsa len=2.0]
-		ivi_1 [fillcolor=darkgreen style=filled]
-		Manager -> ivi_1 [label=unity len=2.0]
-		cluster_1 [fillcolor=darkgreen style=filled]
-		Manager -> cluster_1 [label=unity len=2.0]
+	}
+	subgraph clusterRaspberry_1 {
+		color=blue label=cluster_Raspberry_1_5V_3A
+		Raspberry_1 [fillcolor=cyan style=filled]
+		power_2 [fillcolor=darkgreen style=filled]
+		Raspberry_1 -> power_2 [label=bash len=2.0]
 	}
 	subgraph clusterThinkPad {
-		color=blue label=cluster_ThinkPad_20V_3A
+		color=blue label=cluster_ThinkPad_20V_7A
 		ThinkPad [fillcolor=cyan style=filled]
-		power_2 [fillcolor=darkgreen style=filled]
-		ThinkPad -> power_2 [label=bash len=2.0]
-		sound_2 [fillcolor=darkgreen style=filled]
-		ThinkPad -> sound_2 [label=alsa len=2.0]
-		cluster_2 [fillcolor=darkgreen style=filled]
-		ThinkPad -> cluster_2 [label=unity len=2.0]
-		ivi_2 [fillcolor=darkgreen style=filled]
-		ThinkPad -> ivi_2 [label=unity len=2.0]
-	}
-	subgraph clusterRaspberry {
-		color=blue label=cluster_Raspberry_5V_3A
-		Raspberry [fillcolor=cyan style=filled]
 		power_3 [fillcolor=darkgreen style=filled]
-		Raspberry -> power_3 [label=bash len=2.0]
-		max7219_3 [fillcolor=brown style=filled]
-		Raspberry -> max7219_3 [label=uart len=2.0]
-		sound_3 [fillcolor=darkgreen style=filled]
-		Raspberry -> sound_3 [label=alsa len=2.0]
+		ThinkPad -> power_3 [label=bash len=2.0]
 	}
-	clusterManager -> clusterManager [label=udp len=10.0]
-	clusterManager -> clusterThinkPad [label=udp len=10.0]
-	clusterManager -> clusterRaspberry [label=udp len=10.0]
+	subgraph clusterThinkPad {
+		color=blue label=cluster_ThinkPad_20V_7A
+		ThinkPad [fillcolor=cyan style=filled]
+		sound_4 [fillcolor=darkgreen style=filled]
+		ThinkPad -> sound_4 [label=alsa len=2.0]
+	}
 }

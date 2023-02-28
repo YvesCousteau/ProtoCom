@@ -46,7 +46,7 @@ apiRelDeviceService.rel_device_service(app,db);
 /***************/
 api.execution(app);
 api.ping(app);
-api.diagram(app);
+api.diagram(app,db);
 /***************/
 api.exit(app);
 /****************************/

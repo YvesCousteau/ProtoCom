@@ -25,14 +25,19 @@ export default function Device() {
     useEffect(() => {
         if (diagram) {
             Api.getDiagram(setState);
-            setTimeout(() => Diagram(), 2000);
+            setTimeout(() => setDiagramSave(true), 2000);
+            
             setDiagram(false);
         }
     }, [diagram]);
 
-    function Diagram() {
-        saveAs(photo, "diagram.png");
-    }
+    const [diagramSave, setDiagramSave] = useState(false);
+    useEffect(() => {
+        if (diagramSave) {
+            saveAs(photo, "diagram.png");
+            setDiagramSave(false);
+        }
+    }, [diagramSave]);
     
     return(
         <div className="mx-8">
@@ -66,6 +71,9 @@ function Item(props: any) {
                 <div className=''>
                     <Paper title={"Device : "+props.device.device} removable={false} className='w-full'>
                         <p className="text-classic pb-1">{"IP : "+props.device.ip}</p>
+                        <p className="text-classic pb-1">{"Voltage : "+props.device.voltage}</p>
+                        <p className="text-classic pb-1">{"Amperage : "+props.device.amperage}</p>
+                        <p className="text-classic pb-1">{"ID : "+props.device.id}</p>
                         <Link to={'device/'+props.device.device} className="flex justify-center btn btn-classic ">Functions</Link>
                         <button className={`btn ${state === 'unknow' && 'btn-classic'} ${state === false && 'btn-close'} ${state === true && 'btn-open'} mt-4 w-full`} onClick={() => setPing(true)}>{"Ping : "+state}</button>
                     </Paper>

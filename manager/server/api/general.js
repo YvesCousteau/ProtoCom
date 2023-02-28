@@ -1,4 +1,5 @@
 const { exec } = require('child_process')
+const fs = require('fs');
 
 function ping(app) {
     app.get("/api/ping/:ip", (req, res) => {
@@ -38,8 +39,34 @@ function execution(app) {
     });
 }
 
-function diagram(app) {
+function diagram(app,db) {
     app.get("/api/diagram", (req, res) => {
+        db.all(
+            `SELECT
+                device.id,
+                device.device,
+                device.ip,
+                device.voltage,
+                device.amperage,
+                service.id AS id_service,
+                service.service,
+                service.communication,
+                service.removable
+            FROM rel_device_service 
+            INNER JOIN device ON device.id = rel_device_service.id_device
+            INNER JOIN service ON service.id = rel_device_service.id_service`, 
+            [], function (err, rows) {
+                if (err) {
+                    res.status(400).json({ "error": res.message })
+                    return;
+                }
+                var json = JSON.stringify(rows, null, 4);
+                fs.writeFile('diagram.json', json, function (err) {
+                    if (err) throw err;
+                    console.log('Saved!');
+                });
+            });
+
         try {
             exec("python3 ../../assets/graphiz/graphiz.py", function (error, stdout, stderr) {
                 res.json({ 
