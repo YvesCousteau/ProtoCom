@@ -57,7 +57,7 @@ export function getServiceArguments(setValue: any, name: string, setState: any) 
 
 export function addDeviceService(body: any, setState: any) {
     try {
-        let result = fetch("/api/device/add/service/", {
+        let result = fetch("/api/rel_device_service/add/", {
             method: 'POST',
             headers: {
                 Accept: 'application.json',

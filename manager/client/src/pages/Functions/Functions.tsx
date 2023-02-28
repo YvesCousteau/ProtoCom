@@ -61,6 +61,7 @@ export default function Functions() {
 
 function AddModal(props: any) {
     let { name } = useParams();
+    let { id } = useParams();
     const [services, setServices]: any = useState(null);
     useEffect(() => {
         if (props.modal) {
@@ -72,7 +73,10 @@ function AddModal(props: any) {
     const [added, setAdded] = useState(false);
     useEffect(() => {
         if(added) {
-            let body = {id_service:idService,id_device:props.device[0].id};
+            let body = {
+                id_service:idService,
+                id_device:id
+            };
             Api.addDeviceService(body,props.setState);
             props.setRender(!props.render);
             props.setModal(false);
