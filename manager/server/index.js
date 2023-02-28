@@ -4,10 +4,29 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const { exec } = require('child_process')
 const PORT = process.env.PORT || 3001;
+// =======================================
+var sqlite3 = require('sqlite3').verbose()
+let db = new sqlite3.Database('db.sqlite', (err) => {
+    if (err) {
+        // Cannot open database
+        console.error(err.message)
+        throw err
+    } else {
+        console.log('Connected to the SQLite database.')
+    }
+});
+const database = require("./database");
+database.setup(db);
 // API File
-// import { init, equipements, services } from "api.js";
-const api = require("./api");
+const api = require("./api/general");
+const apiDevice = require("./api/device");
+const apiService = require("./api/service");
+const apiScenario = require("./api/scenario");
+const apiArgument = require("./api/argument");
+const apiAction = require("./api/action");
+const apiRelDeviceService = require("./api/rel_device_service");
 /*****************/
 /***** Start *****/
 /*****************/
@@ -18,23 +37,21 @@ app.use(bodyParser.json());
 /***************/
 api.init(app);
 /***************/
-api.fcts(app);
-api.equipements(app);
+apiDevice.device(app,db);
+apiService.service(app,db);
+apiScenario.scenario(app,db);
+apiArgument.argument(app,db);
+apiAction.action(app,db);
+apiRelDeviceService.rel_device_service(app,db);
 /***************/
-api.services(app);
+api.execution(app);
+api.ping(app);
+api.diagram(app);
 /***************/
-
-/***************/
-app.get('*', (req, res) => {
-    res.status(404).json({ "error": "Path does not exist" })
-    res.json({
-        "message": "Path does not exist",
-    });
-});
+api.exit(app);
 /****************************/
 /***** Server Listening *****/
 /****************************/
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
-
