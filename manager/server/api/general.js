@@ -1,3 +1,5 @@
+const { exec } = require('child_process')
+
 function ping(app) {
     app.get("/api/ping/:ip", (req, res) => {
         try {

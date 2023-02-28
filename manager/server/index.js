@@ -4,7 +4,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const { exec } = require('child_process')
+
 const PORT = process.env.PORT || 3001;
 // =======================================
 var sqlite3 = require('sqlite3').verbose()
