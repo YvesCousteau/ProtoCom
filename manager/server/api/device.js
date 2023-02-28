@@ -143,57 +143,6 @@ function device(app,db) {
                 })
         });
     });
-    // ================================================================
-    // app.post("/api/device/", (req, res, next) => {
-    //     db.run(
-    //         `INSERT INTO 
-    //             device (name, ip, voltage, amperage) 
-    //         VALUES 
-    //             (?,?,?,?)`, 
-    //         [req.body.name,req.body.ip,req.body.voltage,req.body.amperage], function (err, result) {
-    //         if (err) {
-    //             res.status(400).json({ "error": err.message })
-    //             return;
-    //         }
-    //         res.json({
-    //             "message": "success"
-    //         })
-    //     });
-    // });
-    // app.patch("/api/device/:name", (req, res, next) => {
-    //     db.run(
-    //         `UPDATE 
-    //             device 
-    //         SET
-    //             device.name = COALESCE(?,name),
-    //             device.ip = COALESCE(?,ip),
-    //             device.voltage = COALESCE(?,voltage),
-    //             device.amperage = COALESCE(?,amperage), 
-    //         WHERE device.name LIKE ?`,
-    //         [req.body.name, req.body.ip, req.body.voltage, req.body.amperage, req.params.name],
-    //         function (err, result) {
-    //             if (err) {
-    //                 res.status(400).json({ "error": res.message })
-    //                 return;
-    //             }
-    //             res.json({
-    //                 "message": "success"
-    //             })
-    //         });
-    // });
-    // app.delete("/api/device/:name", (req, res, next) => {
-    //     db.run(
-    //         'DELETE FROM device WHERE device.name LIKE ?',
-    //         [req.params.name], function (err, result) {
-    //             if (err) {
-    //                 res.status(400).json({ "error": res.message })
-    //                 return;
-    //             }
-    //             res.json({ 
-    //                 "message": "success"
-    //             })
-    //     });
-    // });
 }
 
 module.exports = { device };

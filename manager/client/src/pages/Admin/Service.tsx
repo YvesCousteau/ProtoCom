@@ -21,15 +21,6 @@ export function Services(props: any) {
     }, [inputService,services]);
 
     const [serviceID, setServiceID]: any = useState(null);
-    useEffect(() => {
-        if (inputService && services && services.length > 0){
-            for (const item of services) {
-                if (item.service === inputService) {
-                    setServiceID({id:item.id,name:inputService});
-                }
-            }
-        }
-    }, [inputService,services]);
     
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);
@@ -84,7 +75,7 @@ export function Services(props: any) {
                 <div className="grid grid-cols-7">
                     <p className="self-center text-classic">Selection :&nbsp;</p>
                     <div className=" col-span-4 relative rounded-md shadow-sm h-full">
-                        {services && services.length > 0 && <ListBox data={services} extension='service' setSelected={setInputService} selected={inputService}/>}
+                        {services && services.length > 0 && <ListBox data={services} extension='service' setSelected={setInputService} selected={inputService} setID={setServiceID}/>}
                     </div>
                     <Buttons setAdded={setAddModal} setUpdated={setUpdateModal} setDeleted={setDeletModal}/>
                 </div>
@@ -130,7 +121,7 @@ export function Services(props: any) {
                 </UpdateModal>
                 <DeleteModal modal={deleteModal} setModal={setDeletModal} setDeleted={setDeleted} title={'Service '+ inputService}/>
             </div>
-            {serviceID && <Arguments setState={props.setState} service={serviceID} />}
+            {serviceID && <Arguments setState={props.setState} serviceID={serviceID} serviceName={inputService}/>}
         </>
     );
 }

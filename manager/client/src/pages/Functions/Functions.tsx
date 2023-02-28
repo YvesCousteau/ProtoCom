@@ -10,23 +10,15 @@ export default function Functions() {
     let { name } = useParams();
     const [modalAdd, setModalAdd] = useState(false);
 
-    const [services, setServices]: any = useState(null);
-    const [device, setDevice]: any = useState(null);
-    // Alert Message
-    const [state, setState]: any = useState(null);
-    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
-
     const [render, setRender] = useState(false);
 
-    // Render device functions name
+    const [device, setDevice]: any = useState(null);
     useEffect(() => {
         Api.getDevice(setDevice, name, setState);
     }, [render, name]);
-    // Get all functions Once
-    useEffect(() => {
-        Api.getServices(setServices, setState);
-    }, []);
-    // Render alert
+
+    const [state, setState]: any = useState(null);
+    const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
         if (state) {
             setAlert({ visible: true, type: state.state, status: null, url: state.url });
@@ -54,28 +46,70 @@ export default function Functions() {
                     )}
                 </div>
             </div>
-            {services && <>
-                <AddModal 
-                modal={modalAdd}
-                setModal={setModalAdd} 
-
-                services={services}
-                device={device}
-
-                setState={setState}
-                setRender={setRender}
-                render={render} />
-            </>}
+            <AddModal 
+            modal={modalAdd}
+            setModal={setModalAdd} 
+            device={device}
+            setState={setState}
+            setRender={setRender}
+            render={render} />
             <Alert alert={alert}/>
         </div>
         
     );
 }
 
+function AddModal(props: any) {
+    let { name } = useParams();
+    const [services, setServices]: any = useState(null);
+    useEffect(() => {
+        if (props.modal) {
+            Api.getServices(setServices, props.setState);
+        }
+    }, [props.modal]);
+    const [inputName, setInputName] = useState(null);
+    const [idService, setIdService] = useState(null);
+    const [added, setAdded] = useState(false);
+    useEffect(() => {
+        if(added) {
+            let body = {id_service:idService,id_device:props.device[0].id};
+            Api.addDeviceService(body,props.setState);
+            props.setRender(!props.render);
+            props.setModal(false);
+            setAdded(false);
+        }
+    }, [added, inputName, name, props]);
+    useEffect(() => {
+        if (!inputName && services) {
+            setInputName(services[0].service);
+        }
+    }, [inputName,services]);
+    return (
+        <Modal
+            open={props.modal}
+            setOpen={props.setModal}
+            title="Add"
+            subtitle="Setup your device">
+            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Name :&nbsp;</p>
+                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
+                        {services && services.length > 0  && <ListBox data={services} extension='service' setSelected={setInputName} selected={inputName} setID={setIdService}/>}
+                    </div>
+                </div>
+                <div className="grid grid-cols-4">
+                    <p className="self-center text-classic">Device :</p>
+                    {name && <p className="text-lg font-semibold text-gray-800">{name}</p>}
+                </div>
+                <button className='btn btn-open w-32 mx-auto' disabled={inputName === ''} onClick={() => setAdded(true)}>Send</button>
+            </div>
+        </Modal>
+    );
+}
+
 function Item(props: any) {
     const [modalRun, setModalRun] = useState(false);
     const [modalDelete, setModalDelete] = useState(false);
-    
     return(
         <div className='w-full'>
             {props.service !== null && (
@@ -93,54 +127,7 @@ function Item(props: any) {
     );
 }
 
-function AddModal(props: any) {
-    let { name } = useParams();
-    const [inputName, setInputName] = useState();
-    const [created, setCreated] = useState(false);
-    useEffect(() => {
-        if(created) {
-            let id_service;
-            for (const item of props.services) {
-                if (item.service === inputName) {
-                    id_service = item.id;
-                }
-            }
-            let body = {id_service:id_service,id_device:props.device[0].id};
-            
-            Api.addDeviceService(body,props.setState);
-            props.setRender(!props.render);
-            props.setModal(false);
-            setCreated(false);
-        }
-    }, [created, inputName, name, props]);
-    // Function selection
-    useEffect(() => {
-        if (!inputName && props.services) {
-            setInputName(props.services[0].service);
-        }
-    }, [inputName,props.services]);
-    return (
-        <Modal
-            open={props.modal}
-            setOpen={props.setModal}
-            title="Add"
-            subtitle="Setup your device">
-            <div className='bg-gray-300 py-4 rounded-[12px] px-4 mx-6 grid grid-cols-1 gap-4'>
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Name :&nbsp;</p>
-                    <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.services.length > 0  && <ListBox data={props.services} extension='service' setSelected={setInputName} selected={inputName} />}
-                    </div>
-                </div>
-                <div className="grid grid-cols-4">
-                    <p className="self-center text-classic">Device :</p>
-                    {name && <p className="text-lg font-semibold text-gray-800">{name}</p>}
-                </div>
-                <button className='btn btn-open w-32 mx-auto' disabled={inputName === ''} onClick={() => setCreated(true)}>Send</button>
-            </div>
-        </Modal>
-    );
-}
+
 function DeleteModal(props: any) {
     let { name } = useParams();
     const [deleted, setDeleted] = useState(false);
@@ -165,6 +152,7 @@ function DeleteModal(props: any) {
         </Modal>
     );
 }
+
 function RunModal(props: any) {
     const [ran, setRan] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -175,7 +163,6 @@ function RunModal(props: any) {
             Api.getServiceArguments(setArguments, props.item.service.service, props.item.setState);
         }
     }, [props.modal]);
-    // Function selection
     useEffect(() => {
         if (!inputValue && args) {
             setInputValue(args[0].argument);

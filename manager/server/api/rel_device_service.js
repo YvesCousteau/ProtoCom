@@ -1,5 +1,5 @@
 function rel_device_service(app,db) {
-    app.post("/api/device/add/service/", (req, res, next) => {
+    app.post("/api/rel_device_service/add/", (req, res, next) => {
         console.log(req.body.id_service,req.body.id_device);
         db.run(
             `INSERT INTO 
@@ -16,7 +16,7 @@ function rel_device_service(app,db) {
             })
         });
     });
-    app.delete("/api/device/delete/service/", (req, res, next) => {
+    app.delete("/api/rel_device_service/delete/", (req, res, next) => {
         db.run(
             'DELETE FROM rel_device_service WHERE rel_device_service.id_service = ? AND rel_device_service.id_device = ?',
             [req.body.id_service,req.body.id_device], function (err, result) {

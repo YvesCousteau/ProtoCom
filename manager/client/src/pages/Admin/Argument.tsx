@@ -25,7 +25,7 @@ export function Arguments(props: any) {
             console.log('added');
             let body = {
                 argument:inputArgument,
-                id_service:props.service.id
+                id_service:props.serviceID
             };
             Api.addArgument(body,props.setState);
             setAddModal(false);
@@ -37,7 +37,7 @@ export function Arguments(props: any) {
             console.log('updated');
             let body = {
                 argument:inputArgumentUpdated,
-                id_service:props.service.id
+                id_service:props.serviceID
             };
             Api.updateArgument(body,inputArgument,props.setState);
             setUpdateModal(false);
@@ -55,15 +55,15 @@ export function Arguments(props: any) {
 
     useEffect(() => {
         setInputArgument(null);
-        Api.getServiceArguments(setArguments,props.service.name, props.setState);
-    },[deleted,updated,added,props.service]);
+        Api.getServiceArguments(setArguments,props.serviceName, props.setState);
+    },[deleted,updated,added,props.serviceName]);
 
     const [addModal, setAddModal] = useState(false);
     const [updateModal, setUpdateModal] = useState(false);
     const [deleteModal, setDeletModal] = useState(false);
     return(
         <div className="grid grid-cols-1 gap-4 bg-gray-300 mb-4 p-6 rounded-2xl">
-            <p className="text-classic">{'Argument of '+ props.service.name}</p>
+            <p className="text-classic">{'Argument of '+ props.serviceName}</p>
             <div className="grid grid-cols-7">
                 <p className="self-center text-classic">Selection :&nbsp;</p>
                 <div className=" col-span-4 relative rounded-md shadow-sm h-10">

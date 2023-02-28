@@ -1,8 +1,18 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 export default function ListBox(props: any) {
+  useEffect(() => {
+    if (props.setID) {
+      for (const item of props.data) {
+        if (props.selected == item[props.extension]) {
+          props.setID(item['id'])
+        }
+      }
+    }
+    
+}, [props.selected]);
   return (
     <div className="">
       <Listbox value={props.selected} onChange={props.setSelected}>

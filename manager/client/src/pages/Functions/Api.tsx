@@ -79,7 +79,7 @@ export function addDeviceService(body: any, setState: any) {
 }
 export function deleteDeviceService(body: any, setState: any) {
     try {
-        let result = fetch("/api/device/delete/service/", {
+        let result = fetch("/api/rel_device_service/delete/", {
             method: 'DELETE',
             headers: {
                 Accept: 'application.json',
