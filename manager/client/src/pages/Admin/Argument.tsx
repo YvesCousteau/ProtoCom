@@ -15,7 +15,7 @@ export function Arguments(props: any) {
         if (!inputArgument && args && args.length > 0 ) {
             setInputArgument(args[0].argument);
         }
-    }, [inputArgument,args]);
+    }, [args]);
     
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);

@@ -14,6 +14,10 @@ export default function Scenarios() {
         Api.getScenarios(setScenarios, setState);
     }, [render]);
 
+    const [devices, setDevices]: any = useState(null);
+    useEffect(() => {
+        Api.getDevices(setDevices, setState);
+    }, []);
     const [state, setState]: any = useState(null);
     const [alert, setAlert] = useState({ visible: false, type: null, status: null, url: null });
     useEffect(() => {
@@ -31,10 +35,11 @@ export default function Scenarios() {
                     <button className=' btn btn-classic h-8 w-24 ' onClick={() => setModalAdd(true)}>+ ADD</button>
                 </div>
                 <div className="grid grid-cols-1 gap-4 justify-items-center mx-6">
-                    {scenarios && scenarios.length > 0 && scenarios.map((scenario: any, index: number) => 
+                    {devices && devices.length > 0 && scenarios && scenarios.length > 0 && scenarios.map((scenario: any, index: number) => 
                         <Item 
                         key={index} 
                         scenario={scenario} 
+                        devices={devices} 
                         index={index}
                         setState={setState}
                         setRender={setRender} 
@@ -124,7 +129,7 @@ function AddModal(props: any) {
     }, [serviceArguments]);
 
     useEffect(() => {
-        if(created && actions) {
+        if(created && actions && actions.length > 0) {
             for (const item of actions) {
                 const body = { 
                     id_device:item.id_device, 
@@ -166,25 +171,25 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Scenario :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {props.scenarios && props.scenarios.length > 0  && <ListBox data={props.scenarios} extension='scenario' setSelected={setInputScenario} selected={inputScenario} setID={setIdScenario}/>}
+                        {props.scenarios && props.scenarios.length > 0  && <ListBox data={props.scenarios} extension='scenario' setSelected={setInputScenario} selected={inputScenario} setID={setIdScenario} id_extension='id'/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Device :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {devices && devices.length > 0  && <ListBox data={devices} extension='device' setSelected={setInputDevice} selected={inputDevice} setID={setIdDevice}/>}
+                        {devices && devices.length > 0  && <ListBox data={devices} extension='device' setSelected={setInputDevice} selected={inputDevice} setID={setIdDevice} id_extension='id'/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Service :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {deviceServices && deviceServices.length > 0 && <ListBox data={deviceServices} extension='service' setSelected={setInputService} selected={inputService} setID={setIdService}/>}
+                        {deviceServices && deviceServices.length > 0 && <ListBox data={deviceServices} extension='service' setSelected={setInputService} selected={inputService} setID={setIdService} id_extension='id_service'/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Argument :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {serviceArguments && serviceArguments.length > 0 && <ListBox data={serviceArguments} extension='argument' setSelected={setInputArgument} selected={inputArgument} setID={setIdArgument}/>}
+                        {serviceArguments && serviceArguments.length > 0 && <ListBox data={serviceArguments} extension='argument' setSelected={setInputArgument} selected={inputArgument} setID={setIdArgument} id_extension='id_argument' />}
                     </div>
                 </div>
                 <div className="ml-40 grid grid-cols-2 gap-4">
@@ -214,14 +219,18 @@ function Item(props: any) {
     }
     useEffect(() => {
         if (ran) {
-            for (const item of props.scenario.scenario) {
+            for (const item of actions) {
+                console.log(actions);
+                
                 let ip;
                 for(const device of props.devices) {
-                    if (device.name === item.device) {
+                    console.log(device);
+                    
+                    if (device.device === item.device) {                    
                         ip = device.ip;
                     }
                 }
-                Api.service("api/service/" + item.function, ip, item.arg, props.setState);
+                Api.service(item.service, ip, item.argument, props.setState);
             }
             setRan(false)   
         }

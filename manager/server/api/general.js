@@ -26,7 +26,7 @@ function ping(app) {
 function execution(app) {
     app.post("/api/execution/:name/:option/:ip/", (req, res) => {
         try {
-            exec('python3 ../services/'+req.params.name+'/client_master.py ' +req.params.ip+' '+req.params.option, function (error, stdout, stderr) {
+            exec('python3 ../../services/'+req.params.name+'/client_master.py ' +req.params.ip+' '+req.params.option, function (error, stdout, stderr) {
                 res.json({ 
                     "message":"success"
                 })

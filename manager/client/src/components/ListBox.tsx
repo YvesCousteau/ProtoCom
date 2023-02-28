@@ -7,7 +7,7 @@ export default function ListBox(props: any) {
     if (props.setID) {
       for (const item of props.data) {
         if (props.selected == item[props.extension]) {
-          props.setID(item['id'])
+          props.setID(item[props.id_extension])
         }
       }
     }

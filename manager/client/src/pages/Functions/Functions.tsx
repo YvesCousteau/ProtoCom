@@ -98,7 +98,7 @@ function AddModal(props: any) {
                 <div className="grid grid-cols-4">
                     <p className="self-center text-classic">Name :&nbsp;</p>
                     <div className=" col-span-3 relative rounded-md shadow-sm h-full">
-                        {services && services.length > 0  && <ListBox data={services} extension='service' setSelected={setInputName} selected={inputName} setID={setIdService}/>}
+                        {services && services.length > 0  && <ListBox data={services} extension='service' setSelected={setInputName} selected={inputName} setID={setIdService} id_extension='id'/>}
                     </div>
                 </div>
                 <div className="grid grid-cols-4">

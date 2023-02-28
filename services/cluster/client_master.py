@@ -6,7 +6,7 @@ port = 20003
 bufferSize = 1024
 ip = sys.argv[1]
 
-msgFromClient = {"value":"view"}
+msgFromClient = {"value":sys.argv[2]}
 bytesToSend = json.dumps(msgFromClient).encode()
 
 serverAddressPort = (sys.argv[1], port)

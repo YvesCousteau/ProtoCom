@@ -75,7 +75,7 @@ export function Services(props: any) {
                 <div className="grid grid-cols-7">
                     <p className="self-center text-classic">Selection :&nbsp;</p>
                     <div className=" col-span-4 relative rounded-md shadow-sm h-full">
-                        {services && services.length > 0 && <ListBox data={services} extension='service' setSelected={setInputService} selected={inputService} setID={setServiceID}/>}
+                        {services && services.length > 0 && <ListBox data={services} extension='service' setSelected={setInputService} selected={inputService} setID={setServiceID} id_extension='id'/>}
                     </div>
                     <Buttons setAdded={setAddModal} setUpdated={setUpdateModal} setDeleted={setDeletModal}/>
                 </div>
