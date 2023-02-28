@@ -38,6 +38,7 @@ function setup(db) {
                             ('play', 2),
                             ('stop', 2),
                             ('hello', 3),
+                            ('goodbye', 3),
                             ('goodbye', 3)`,
                         (err) => {
                             if (err) {console.log(err)} 
