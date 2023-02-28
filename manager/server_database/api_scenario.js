@@ -86,6 +86,20 @@ function scenario(app,db) {
                 })
             });
     });
+    app.delete("/api/scenario/delete/single/:name", (req, res, next) => {
+        console.log(req.params.name);
+        db.run(
+            'DELETE FROM scenario WHERE scenario.scenario LIKE ?',
+            [req.params.name], function (err, result) {
+                if (err) {
+                    res.status(400).json({ "error": res.message })
+                    return;
+                }
+                res.json({ 
+                    "message": "success"
+                })
+        });
+    });
     // app.post("/api/scenario/add/action", (req, res, next) => {
     //     db.run(
     //         `INSERT INTO 

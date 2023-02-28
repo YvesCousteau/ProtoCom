@@ -125,6 +125,19 @@ function device(app,db) {
                 })
         });
     });
+    app.delete("/api/device/delete/single/:name", (req, res, next) => {
+        db.run(
+            'DELETE FROM device WHERE device.device = ?',
+            [req.params.name], function (err, result) {
+                if (err) {
+                    res.status(400).json({ "error": res.message })
+                    return;
+                }
+                res.json({ 
+                    "message": "success"
+                })
+        });
+    });
     // ================================================================
     // app.post("/api/device/", (req, res, next) => {
     //     db.run(

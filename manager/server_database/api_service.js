@@ -85,6 +85,19 @@ function service(app,db) {
                 })
             });
     });
+    app.delete("/api/service/delete/single/:name", (req, res, next) => {
+        db.run(
+            'DELETE FROM service WHERE service.service = ?',
+            [req.params.name], function (err, result) {
+                if (err) {
+                    res.status(400).json({ "error": res.message })
+                    return;
+                }
+                res.json({ 
+                    "message": "success"
+                })
+        });
+    });
     // ================================================================
     // app.post("/api/device/", (req, res, next) => {
     //     db.run(
