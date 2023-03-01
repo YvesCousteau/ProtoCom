@@ -2,6 +2,7 @@ import socket
 import sys
 import json 
 import threading, wave, pyaudio, time
+import os
 
 port = 9633
 bufferSize = 65536
@@ -10,6 +11,10 @@ chunk = 1024
 wf = wave.open("../../assets/music/file_example.wav")
 p = pyaudio.PyAudio()
 
+if sys.argv[2] == 'stop':
+    print('stop')
+    os.system('pkill -9 -f client_master')
+    sys.exit("Exiting the code with sys.exit()!")
 # Create a socket at client side
 try:
     sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
