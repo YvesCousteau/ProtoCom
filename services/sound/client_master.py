@@ -23,11 +23,11 @@ try:
 except socket.error as err:
     print('Socket error because of %s' %(err))
 
-try:
-    sock.sendto(b'heloo', serverAddressPort)
-except socket.gaierror:
-    print('There an error resolving the host')
-    sys.exit() 
+# try:
+#     sock.sendto(bytesToSend, serverAddressPort)
+# except socket.gaierror:
+#     print('There an error resolving the host')
+#     sys.exit() 
 
 if sys.argv[2] == 'stop':
     print('stop')
@@ -46,14 +46,9 @@ stream = p.open(
     frames_per_buffer=chunk
 )
 
-sock.sendto(b'SEXE', (sys.argv[1], port))
-
 data = None
 sample_rate = wf.getframerate()
 while True:
-    # msg,address = sock.recvfrom(bufferSize)
-    # print('Message from Client >> {}'.format(msg))
-    # print('Client IP Address:{}'.format(address))
     while True:
         data = wf.readframes(chunk)
         sock.sendto(data,(sys.argv[1], port))
