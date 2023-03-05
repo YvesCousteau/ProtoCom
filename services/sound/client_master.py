@@ -10,7 +10,7 @@ ip = sys.argv[1]
 chunk = 1024
 wf = wave.open("../../assets/music/file_example.wav")
 p = pyaudio.PyAudio()
-
+serverAddressPort = (sys.argv[1], port)
 # Create a socket at client side
 try:
     sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)

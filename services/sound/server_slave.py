@@ -16,9 +16,9 @@ def getAudioData():
         frame,_= sock.recvfrom(bufferSize)
         q.put(frame)
         print('Queue size...',q.qsize())
-        # bytesAddressPair = sock.recvfrom(bufferSize)
-        # message = json.loads(bytesAddressPair[0].decode())
-        # print("WWWWWWWWWWWWWWWWWW"+message)
+        bytesAddressPair = sock.recvfrom(1024)
+        message = json.loads(bytesAddressPair[0].decode())
+        print("WWWWWWWWWWWWWWWWWW"+message)
 
 # Create a datagram socket
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
