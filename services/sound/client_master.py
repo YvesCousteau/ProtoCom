@@ -20,10 +20,10 @@ except socket.error as err:
     
 if sys.argv[2] == 'stop':
     print('stop')
-    # os.system('pkill -9 -f client_master')
     msgFromClient = {"value":sys.argv[2]}
     bytesToSend = json.dumps(msgFromClient).encode()
     sock.sendto(bytesToSend, serverAddressPort)
+    os.system('pkill -9 -f client_master')
     sys.exit("Exiting the code with sys.exit()!")
 
 print("channels ",wf.getnchannels())
