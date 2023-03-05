@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import * as Api from './Api';
+import * as io from "socket.io-client";
+
+const socket = io.connect('http://192.168.1.23:6001');
 
 const Navbar = () => {
     /* Not rendered */
@@ -11,6 +14,30 @@ const Navbar = () => {
         {name:"Admin",path:"/admin"},
     ]
     const logo = require("../../assets/logo512.png")
+
+    const [speed, setSpeed] = useState(0)
+    const [isConnected, setIsConnected] = useState(socket.connected);
+    useEffect(() => {
+        socket.on('connect', () => {
+          socket.emit('speed::subscribe')
+          setIsConnected(true);
+        });
+    
+        socket.on('speed::update', (timestamp: any) => {
+          console.log(timestamp)
+          setSpeed(timestamp)
+        });
+    
+        socket.on('disconnect', () => {
+          setIsConnected(false);
+        });
+    
+        return () => {
+          socket.off('connect');
+          socket.off('disconnect');
+          socket.off('speed::update');
+        };
+    }, []);
     return(
     <div>
         <nav>
@@ -27,6 +54,7 @@ const Navbar = () => {
                                     <Link to={item.path} className={`flex justify-center btn btn-primary w-44 ${item.path === location.pathname && "btn-secondary"}`}>{item.name}</Link>
                                 </li>
                             ))}
+                            <p className="btn - btn-classic">{"Speed : "+ speed}</p>
                         </div>
                     </div>
                 </div>
