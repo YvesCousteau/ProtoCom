@@ -16,6 +16,12 @@ def getAudioData():
         frame,_= sock.recvfrom(bufferSize)
         q.put(frame)
         print('Queue size...',q.qsize())
+
+def getMessage():
+    while True:
+        bytesAddressPair = sock.recvfrom(1024)
+        message = json.loads(bytesAddressPair[0].decode())
+        print("WWWWWWWWWWWWWWWWWW"+message)
         
 
 # Create a datagram socket
@@ -38,16 +44,12 @@ stream = p.open(
     frames_per_buffer=chunk
 )
 
-t1 = threading.Thread(target=getAudioData, args=())
-t1.start()
+t1 = threading.Thread(target=getAudioData, args=()).start()
+t2 = threading.Thread(target=getMessage, args=()).start()
 time.sleep(1)
 
 print('Now Playing...')
 while True:
-    
     frame = q.get()
     stream.write(frame)
-
-    bytesAddressPair = sock.recvfrom(1024)
-    message = json.loads(bytesAddressPair[0].decode())
-    print("WWWWWWWWWWWWWWWWWW"+message)
+    
