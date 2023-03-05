@@ -11,16 +11,20 @@ chunk = 1024
 wf = wave.open("../../assets/music/file_example.wav")
 p = pyaudio.PyAudio()
 
-if sys.argv[2] == 'stop':
-    print('stop')
-    os.system('pkill -9 -f client_master')
-    sys.exit("Exiting the code with sys.exit()!")
 # Create a socket at client side
 try:
     sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,bufferSize)
 except socket.error as err:
     print('Socket error because of %s' %(err))
+    
+if sys.argv[2] == 'stop':
+    print('stop')
+    # os.system('pkill -9 -f client_master')
+    msgFromClient = {"value":sys.argv[2]}
+    bytesToSend = json.dumps(msgFromClient).encode()
+    sock.sendto(bytesToSend, serverAddressPort)
+    sys.exit("Exiting the code with sys.exit()!")
 
 print("channels ",wf.getnchannels())
 print("format ",wf.getsampwidth())

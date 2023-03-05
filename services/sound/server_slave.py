@@ -37,28 +37,15 @@ stream = p.open(
     frames_per_buffer=chunk
 )
 
-# while(True):
-#     bytesAddressPair = sock.recvfrom(bufferSize)
-#     message = json.loads(bytesAddressPair[0].decode())
-#     address = bytesAddressPair[1]
-#     clientMsg = "Message from Client >> {}".format(message)
-#     clientIP  = "Client IP Address:{}".format(address)
-#     print(clientMsg)
-#     print(clientIP)
-#     if message["value"] == "play":
-#         print('play')
-#     if message["value"] == "stop":
-#         print('stop')
-#     # Sending a reply to client
-#     sock.sendto(msg,address)
-    
-
 t1 = threading.Thread(target=getAudioData, args=())
 t1.start()
 time.sleep(1)
 
 print('Now Playing...')
 while True:
+    bytesAddressPair = sock.recvfrom(bufferSize)
+    message = json.loads(bytesAddressPair[0].decode())
+    print("WWWWWWWWWWWWWWWWWW"+message)
     frame = q.get()
     stream.write(frame)
 
