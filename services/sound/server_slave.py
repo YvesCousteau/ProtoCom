@@ -16,9 +16,7 @@ def getAudioData():
         frame,_= sock.recvfrom(bufferSize)
         q.put(frame)
         print('Queue size...',q.qsize())
-        bytesAddressPair = sock.recvfrom(65536)
-        message = json.loads(bytesAddressPair[0].decode())
-        print("WWWWWWWWWWWWWWWWWW"+message["value"])
+        
 
 # Create a datagram socket
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -50,42 +48,6 @@ while True:
     frame = q.get()
     stream.write(frame)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-message = b'Hello'
-sock.sendto(message,(ip,port))
-
-stream = p.open(
-    format=p.get_format_from_width(wf.getsampwidth()),
-    channels=wf.getnchannels(),
-    rate=wf.getframerate(),
-    input=True,
-    frames_per_buffer=chunk
-)
-data = None
-sample_rate = wf.getframerate()
-# Listen for incoming datagrams
-msg = str.encode("Hello Client!")
-while True:
-        msg,address = sock.recvfrom(bufferSize)
-        print('Message from Client >> {}'.format(msg))
-        print('Client IP Address:{}'.format(address))
-        while True:
-            data = wf.readframes(chunk)
-            sock.sendto(data,address)
-            time.sleep(0.95*chunk/sample_rate)
-        
-        sock.sendto(msg,address)
+    bytesAddressPair = sock.recvfrom(1024)
+    message = json.loads(bytesAddressPair[0].decode())
+    print("WWWWWWWWWWWWWWWWWW"+message["value"])
