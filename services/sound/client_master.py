@@ -10,19 +10,27 @@ ip = sys.argv[1]
 chunk = 1024
 wf = wave.open("../../assets/music/file_example.wav")
 p = pyaudio.PyAudio()
+
+msgFromClient = {"value":sys.argv[2]}
+bytesToSend = json.dumps(msgFromClient).encode()
+
 serverAddressPort = (sys.argv[1], port)
+
 # Create a socket at client side
 try:
     sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,bufferSize)
 except socket.error as err:
     print('Socket error because of %s' %(err))
-    
+
+try:
+    sock.sendto(bytesToSend, serverAddressPort)
+except socket.gaierror:
+    print('There an error resolving the host')
+    sys.exit() 
+
 if sys.argv[2] == 'stop':
     print('stop')
-    msgFromClient = {"value":sys.argv[2]}
-    bytesToSend = json.dumps(msgFromClient).encode()
-    sock.sendto(bytesToSend, serverAddressPort)
     os.system('pkill -9 -f client_master')
     sys.exit("Exiting the code with sys.exit()!")
 
