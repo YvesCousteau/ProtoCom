@@ -50,4 +50,4 @@ while True:
 
     bytesAddressPair = sock.recvfrom(1024)
     message = json.loads(bytesAddressPair[0].decode())
-    print("WWWWWWWWWWWWWWWWWW"+message["value"])
+    print("WWWWWWWWWWWWWWWWWW"+message)

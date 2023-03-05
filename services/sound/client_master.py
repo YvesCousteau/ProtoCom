@@ -24,7 +24,7 @@ except socket.error as err:
     print('Socket error because of %s' %(err))
 
 try:
-    sock.sendto(bytesToSend, serverAddressPort)
+    sock.sendto(b'heloo', serverAddressPort)
 except socket.gaierror:
     print('There an error resolving the host')
     sys.exit() 
